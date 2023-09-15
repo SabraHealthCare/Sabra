@@ -26,8 +26,7 @@ import copy
 import streamlit.components.v1 as components
 from calendar import monthrange
 s3 = boto3.client('s3')
-st.cache_data.clear()
-st.cache_resource.clear()
+
 #---------------------------define parameters--------------------------
 st.set_page_config(
     page_title="Sabra HealthCare monthly reporting App",
