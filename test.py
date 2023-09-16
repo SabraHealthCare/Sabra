@@ -699,10 +699,10 @@ def View_Summary():
 
 @st.cache_data(experimental_allow_widgets=True)
 def View_Discrepancy(): 
-    global diff_BPC_PL,
+    global diff_BPC_PL
     percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
-    if percent_discrepancy_accounts>0:
-        st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(*100))
+    if diff_BPC_PL.shape[0]>0:
+        st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
     
         diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
         diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
@@ -731,7 +731,7 @@ def View_Discrepancy():
             		required =False)
 		}) 
         download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
-        return edited_diff_BPC_PL,percent_discrepancy_accounts
+        return edited_diff_BPC_PL
     else:
         st.success("All previous data in P&L ties with Sabra data")
 
@@ -741,7 +741,7 @@ def View_Discrepancy_Detail():
     # Sabra detail accounts mapping table
     def color_coding(row):
     	return ['color: blue'] * len(row) if row.Tenant_Account == " Total" else ['color: black'] * len(row)
-    if percent_discrepancy_accounts>0:
+    if diff_BPC_PL.shape[0]>0:
         st.markdown("---")
         st.markdown("P&L—Sabra detail accounts mapping (for discrepancy data)") 
         diff_BPC_PL_detail = (pd.concat([diff_BPC_PL_detail.groupby(["Entity","Sabra_Account","Month","Sabra","Diff"], as_index=False).sum()
@@ -918,8 +918,8 @@ if choice=="Upload P&L" and operator!='select operator':
         # 2 Discrepancy of Historic Data
         with st.expander("Discrepancy for Historic Data",expanded=True):
             ChangeWidgetFontSize('Discrepancy for Historic Data', '25px')
-            edited_diff_BPC,percent_discrepancy_accounts=View_Discrepancy()
-            if percent_discrepancy_accounts>0:
+            edited_diff_BPC=View_Discrepancy()
+            if diff_BPC_PL.shape[0]>0:
                 col1,col2=st.columns([1,5]) 
                 with col1:
                     submit_com=st.button("Submit comments")
