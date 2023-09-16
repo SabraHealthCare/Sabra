@@ -739,7 +739,7 @@ def View_Discrepancy():
             		required =False)
 		}) 
         download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
-        return edited_diff_BPC_PL
+        return edited_diff_BPC_PL,percent_discrepancy_accounts
     else:
         st.success("All previous data in P&L ties with Sabra data")
 
@@ -930,7 +930,7 @@ if choice=="Upload P&L" and operator!='select operator':
         # 2 Discrepancy of Historic Data
         with st.expander("Discrepancy for Historic Data",expanded=True):
             ChangeWidgetFontSize('Discrepancy for Historic Data', '25px')
-            edited_diff_BPC_PL=View_Discrepancy()
+            percent_discrepancy_accounts,edited_diff_BPC_PL=View_Discrepancy()
             if percent_discrepancy_accounts>0.001:
                 col1,col2=st.columns([1,5]) 
                 with col1:
