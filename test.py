@@ -11,8 +11,7 @@ import warnings
 import streamlit as st
 import boto3
 from io import BytesIO
-from io import StringIO
-#import base64
+#from io import StringIO
 from tempfile import NamedTemporaryFile
 import time
 import  streamlit_tree_select
