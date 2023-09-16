@@ -930,7 +930,7 @@ if choice=="Upload P&L" and operator!='select operator':
         # 2 Discrepancy of Historic Data
         with st.expander("Discrepancy for Historic Data",expanded=True):
             ChangeWidgetFontSize('Discrepancy for Historic Data', '25px')
-            edited_diff_BPC,percent_discrepancy_accounts_PL=View_Discrepancy()
+            edited_diff_BPC,percent_discrepancy_accounts=View_Discrepancy()
             if percent_discrepancy_accounts>0.001:
                 col1,col2=st.columns([1,5]) 
                 with col1:
