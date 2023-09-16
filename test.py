@@ -1,12 +1,7 @@
 import pandas as pd
-import seaborn as sns
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib
 import os
-import pyodbc
 import numpy as np
-from calendar import monthrange
 import sys
 from datetime import datetime, timedelta,date
 from openpyxl import load_workbook
@@ -19,8 +14,7 @@ from io import BytesIO
 from io import StringIO
 import base64
 from tempfile import NamedTemporaryFile
-import time
-from streamlit_modal import Modal
+#import time
 import  streamlit_tree_select
 import copy
 import streamlit.components.v1 as components
