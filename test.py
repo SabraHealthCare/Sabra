@@ -519,7 +519,6 @@ def Manage_Account_Mapping(new_tenant_account="Enter tenant account"):
 @st.cache_data(experimental_allow_widgets=True)
 def Sheet_Process(entity_i,sheet_type,sheet_name):
     global account_mapping
-
     # read data from uploaded file
     count=0
     while(True):
@@ -711,7 +710,7 @@ def View_Discrepancy():
     global diff_BPC_PL,percent_discrepancy_accounts
     percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
     if percent_discrepancy_accounts>0.001:
-        st.error("{0:.0f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
+        st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
     
         diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
         diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
@@ -809,17 +808,17 @@ def PL_Process_Main(entity_i,sheet_type):
             
             #if there are duplicated accounts in P&L, ask for confirming
             dup_tenant_account=set([x for x in PL.index if list(PL.index).count(x) > 1])
-            dup_list=[]
             if len(dup_tenant_account)>0:
                 for dup in dup_tenant_account:
                     if dup.upper() not in list(account_mapping[account_mapping["Sabra_Account"]=="NO NEED TO MAP"]["Tenant_Formated_Account"]):
-                        dup_list.append(dup)
-                if len(dup_list)>0:       
-                    st.warning("Warning: There are more than one '{}' accounts in sheet {}. They will be summed up by default.".format('/'.join(dup_list),sheet_name))
+                        st.warning("Warning: There are more than one '{}' accounts in sheet '{}'. They will be summed up by default.".format(dup,sheet_name))
+
             PL,PL_with_detail=Mapping_PL_Sabra(PL,entity_mapping.loc[entity_i,"ENTITY"])
+	    
             max_month_cols=str(max(list(PL.columns)))
 	    # check the latest reporting month
             if latest_month=="2023":
+                st.write(latest_month,"latest_month")		    
                 latest_month=max_month_cols
                 
                 col1,col2,col3=st.columns([4,1,6])
@@ -836,11 +835,10 @@ def PL_Process_Main(entity_i,sheet_type):
                 elif not y:
                     st.stop()
             elif latest_month!=max_month_cols:
-                st.error("The latest month in sheet {} is not {}. Please fix it and re-upload.".format(sheet_name,latest_month))
+                st.error("The latest month in sheet '{}' is not {}. Please fix it and re-upload.".format(sheet_name,latest_month))
                 st.stop()
 	    # check the start reporting month
-               
-    return PL,PL_with_detail
+    return latest_month,PL,PL_with_detail
 
 @st.cache_data(experimental_allow_widgets=True)  
 def Upload_Section(uploaded_file):
@@ -859,7 +857,7 @@ def Upload_Section(uploaded_file):
                 sheet_name_occupancy=str(entity_mapping.loc[entity_i,"Sheet_Name_Occupancy"])
                 sheet_name_balance=str(entity_mapping.loc[entity_i,"Sheet_Name_Balance_Sheet"])
                 property_name=str(entity_mapping.loc[entity_i,"Property_Name"])
-                PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name")
+                latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name")
 		
                 Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
                 Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
@@ -867,7 +865,7 @@ def Upload_Section(uploaded_file):
 		 # check if census data existed
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
-                    PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy")  
+                    latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy")  
                     Total_PL=Total_PL.combine_first(PL)
                     # remove rows with all None value
                     Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
@@ -877,7 +875,7 @@ def Upload_Section(uploaded_file):
 		# check if balance sheet data existed   
 		
                 if sheet_name_balance!='nan' and sheet_name_balance==sheet_name_balance and sheet_name_balance!="" and sheet_name_balance!=" " and sheet_name_balance!=sheet_name:
-                        PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Balance_Sheet")
+                        latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Balance_Sheet")
                         Total_PL=Total_PL.combine_first(PL)
                         # remove rows with all None value
                         Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
@@ -918,7 +916,9 @@ if choice=="Upload P&L" and operator!='select operator':
     if uploaded_file:
 	# initial parameter
         TENANT_ID=format_table["Tenant_ID"][0]
+        global latest_month,percent_discrepancy_accounts
         latest_month="2023"
+        
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail=Upload_Section(uploaded_file)
 
 	    
@@ -942,7 +942,7 @@ if choice=="Upload P&L" and operator!='select operator':
     time.sleep(200)               
 	
 elif choice=="Manage Mapping" and operator!='select operator':
-    st.subheader("Manage Property Mapping")
+    st.subheader("Manage Property Mapping(Not done yet....)")
     entity_mapping=Manage_New_Property_Mapping()
     st.subheader("Manage account Mapping")
     account_mapping=Manage_Account_Mapping()
