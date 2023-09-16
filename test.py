@@ -11,7 +11,6 @@ import warnings
 import streamlit as st
 import boto3
 from io import BytesIO
-#from io import StringIO
 from tempfile import NamedTemporaryFile
 import time
 import  streamlit_tree_select
@@ -700,10 +699,10 @@ def View_Summary():
 
 @st.cache_data(experimental_allow_widgets=True)
 def View_Discrepancy(): 
-    global diff_BPC_PL,percent_discrepancy_accounts
+    global diff_BPC_PL,
     percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
-    if percent_discrepancy_accounts>0.001:
-        st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
+    if percent_discrepancy_accounts>0:
+        st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(*100))
     
         diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
         diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
@@ -742,7 +741,7 @@ def View_Discrepancy_Detail():
     # Sabra detail accounts mapping table
     def color_coding(row):
     	return ['color: blue'] * len(row) if row.Tenant_Account == " Total" else ['color: black'] * len(row)
-    if percent_discrepancy_accounts>0.01:
+    if percent_discrepancy_accounts>0:
         st.markdown("---")
         st.markdown("P&L—Sabra detail accounts mapping (for discrepancy data)") 
         diff_BPC_PL_detail = (pd.concat([diff_BPC_PL_detail.groupby(["Entity","Sabra_Account","Month","Sabra","Diff"], as_index=False).sum()
@@ -775,10 +774,6 @@ def View_Discrepancy_Detail():
 		.format(precision=0,thousands=",").hide(axis="index").to_html(),unsafe_allow_html=True)	
         download_report(diff_BPC_PL_detail_for_download,"P&L accounts mapping for discrepancy")
     download_report(Total_PL_detail,"Full P&L accounts mapping")
-   
-    
-    
-    
    
 
 @st.cache_data(experimental_allow_widgets=True)        
@@ -909,7 +904,7 @@ if choice=="Upload P&L" and operator!='select operator':
     if uploaded_file:
 	# initial parameter
         TENANT_ID=format_table["Tenant_ID"][0]
-        global latest_month,percent_discrepancy_accounts
+        global latest_month,
         latest_month="2023"
         
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail=Upload_Section(uploaded_file)
@@ -924,7 +919,7 @@ if choice=="Upload P&L" and operator!='select operator':
         with st.expander("Discrepancy for Historic Data",expanded=True):
             ChangeWidgetFontSize('Discrepancy for Historic Data', '25px')
             edited_diff_BPC,percent_discrepancy_accounts=View_Discrepancy()
-            if percent_discrepancy_accounts>0.001:
+            if percent_discrepancy_accounts>0:
                 col1,col2=st.columns([1,5]) 
                 with col1:
                     submit_com=st.button("Submit comments")
