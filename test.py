@@ -904,7 +904,7 @@ if choice=="Upload P&L" and operator!='select operator':
     if uploaded_file:
 	# initial parameter
         TENANT_ID=format_table["Tenant_ID"][0]
-        global latest_month,
+        global latest_month
         latest_month="2023"
         
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail=Upload_Section(uploaded_file)
