@@ -12,9 +12,9 @@ import streamlit as st
 import boto3
 from io import BytesIO
 from io import StringIO
-import base64
+#import base64
 from tempfile import NamedTemporaryFile
-#import time
+import time
 import  streamlit_tree_select
 import copy
 import streamlit.components.v1 as components
