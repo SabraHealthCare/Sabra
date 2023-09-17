@@ -455,11 +455,11 @@ def Manage_New_Property_Mapping(operator):
                 st.write("")
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
             with col2:
-                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("",key="P&L"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("",autocomplete=entity_mapping.loc[i,"Sheet_Name"],key="P&L"+str(i))    
             with col3: 
-                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",key="Census"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",autocomplete=entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))    
             with col4:
-                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",key="BS"+str(i)) 
+                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",autocomplete=entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit") 
     if submitted:
         entity_mapping_update=entity_mapping_update.combine_first(entity_mapping)
