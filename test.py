@@ -427,7 +427,7 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
          data = BytesIO(tmp.read())
     s3.upload_fileobj(data,bucket,key)
 
-@st.cache_data(experimental_allow_widgets=True)
+#@st.cache_data(experimental_allow_widgets=True)
 def Manage_New_Property_Mapping(operator):
     #sheet_type: "Sheet_Name" or "Sheet_Name_Occupancy"
     sheet_type="Sheet_Name"
