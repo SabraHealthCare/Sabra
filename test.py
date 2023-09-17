@@ -439,7 +439,6 @@ def Manage_New_Property_Mapping():
     st.markdown(entity_mapping_update.style.hide(axis="index").to_html(), unsafe_allow_html=True)
         
     number_of_property=entity_mapping.shape[0]
-    new_sheetname = [None] * number_of_newproperty
     with st.form(key="Mapping Properties"):
         for i in range(number_of_newproperty):
             col1,col2,col3,col4=columns(4)
