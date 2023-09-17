@@ -441,7 +441,7 @@ def Manage_New_Property_Mapping():
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
         for i in range(entity_mapping.shape[0]):
-            col1,col2,col3,col4=columns(4)
+            col1,col2,col3,col4=st.columns(4)
             with col1:
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
             with col2:
