@@ -442,13 +442,13 @@ def Manage_New_Property_Mapping():
     with st.form(key="Mapping Properties"):
         col1,col2,col3,col4=st.columns([4,3,3,3])
         with col1:
-            st.write("Property Name")
+            st.write("Property")
         with col2:
-            st.write("Sheetname of P&L")    
+            st.write("P&L Sheetname")    
         with col3: 
-            st.write("Sheetname of Census")    
+            st.write("Census Sheetname")    
         with col4:
-            st.write("Sheetname of Balance sheet")  
+            st.write("Balance sheet Sheetname")  
         for i in range(entity_mapping.shape[0]):
             col1,col2,col3,col4=st.columns([4,3,3,3])
             with col1:
@@ -461,8 +461,8 @@ def Manage_New_Property_Mapping():
             with col4:
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit") 
-        if submitted:
-            st.write("st.write(entity_mapping_update)",entity_mapping_update)
+    if submitted:
+            st.write("st.write(entity_mapping_update)")   #  ,entity_mapping_update)
         #entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
         #st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
             Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
@@ -485,8 +485,7 @@ def Manage_Account_Mapping(new_tenant_account="Enter tenant account"):
         submitted = st.form_submit_button("Submit")  
     if submitted:
         if len(Sabra_main_account['checked'])==1:
-            Sabra_main_account_value=Sabra_main_account['checked'][0].upper()
-                    
+            Sabra_main_account_value=Sabra_main_account['checked'][0].upper()          
         elif len(Sabra_main_account['checked'])>1:
             st.warning("Only one to one mapping is allowed.")
             st.stop()
