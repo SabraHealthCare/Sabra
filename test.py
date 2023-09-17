@@ -455,7 +455,7 @@ def Manage_New_Property_Mapping(operator):
             with col3: 
                 entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))    
                 
-	    with col4:
+            with col4:
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
                 
 	submitted = st.form_submit_button("Submit")
