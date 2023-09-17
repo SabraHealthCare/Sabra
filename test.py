@@ -935,8 +935,8 @@ if choice=="Upload P&L" and operator!='select operator':
 elif choice=="Manage Mapping" and operator!='select operator':
     st.cache_data.clear()
     st.cache_resource.clear()
-    #with st.expander("Manage Property Mapping" ,expanded=True):
-    entity_mapping=Manage_Property_Mapping(operator)
+    with st.expander("Manage Property Mapping" ,expanded=True):
+        entity_mapping=Manage_Property_Mapping(operator)
     with st.expander("Manage account Mapping",expanded=True):
         account_mapping=Manage_Account_Mapping()
 
