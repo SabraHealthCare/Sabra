@@ -441,7 +441,7 @@ def Manage_New_Property_Mapping(map_property_list=[]):
     number_of_newproperty=len(map_property_list)
     if number_of_newproperty==0:
         st.write("There is no new property. Please check your mapping below:")
-        st.markdown(entity_mapping)
+        st.dataframe(entity_mapping)
         return entity_mapping
     else:
         new_sheetname = [None] * number_of_newproperty
