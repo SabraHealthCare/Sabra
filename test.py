@@ -437,7 +437,7 @@ def Manage_New_Property_Mapping():
    
     entity_mapping_update=entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]]
     download_report(entity_mapping_update,"{} properties mapping".format(operator))
-        
+    st.write(entity_mapping_update)   
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
         col1,col2,col3,col4=st.columns([4,3,3,3])
