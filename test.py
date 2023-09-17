@@ -428,10 +428,9 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
     s3.upload_fileobj(data,bucket,key)
 
 #@st.cache_data(experimental_allow_widgets=True)
-def Manage_New_Property_Mapping(operator):
+def Manage_Property_Mapping(operator):
     global entity_mapping
     #all the properties are supposed to be in entity_mapping. 
-    st.write(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]])
            
     entity_mapping_updation=pd.DataFrame(columns=["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"])
     number_of_property=entity_mapping.shape[0]
@@ -461,9 +460,7 @@ def Manage_New_Property_Mapping(operator):
         st.write("entity_mapping_updation",entity_mapping_updation)
         for i in range(entity_mapping.shape[0]):
             if entity_mapping_updation.loc[i,"Sheet_Name"]:
-                st.write(entity_mapping.loc[i,"Sheet_Name"])
                 entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"] 
-                st.write(entity_mapping.loc[i,"Sheet_Name"])
             if entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]:
                 entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
             if  entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
@@ -472,8 +469,7 @@ def Manage_New_Property_Mapping(operator):
         download_report(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]],"{} properties mapping".format(operator))
        
         return entity_mapping
-    else:
-        st.stop()
+
 @st.cache_data(experimental_allow_widgets=True)
 def Manage_Account_Mapping(new_tenant_account="Enter tenant account"):
     if new_tenant_account=="Enter tenant account":
@@ -940,7 +936,7 @@ elif choice=="Manage Mapping" and operator!='select operator':
     st.cache_data.clear()
     st.cache_resource.clear()
     #with st.expander("Manage Property Mapping" ,expanded=True):
-    entity_mapping=Manage_New_Property_Mapping(operator)
+    entity_mapping=Manage_Property_Mapping(operator)
     with st.expander("Manage account Mapping",expanded=True):
         account_mapping=Manage_Account_Mapping()
 
