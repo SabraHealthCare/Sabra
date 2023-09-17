@@ -439,23 +439,28 @@ def Manage_New_Property_Mapping(map_property_list=[]):
     if map_property_list==[]:
         map_property_list=list(entity_mapping[entity_mapping[sheet_type]!=entity_mapping[sheet_type]]["Property_Name"])
     number_of_newproperty=len(map_property_list)
-    new_sheetname = [None] * number_of_newproperty
-    with st.form(key="Mapping Properties"):
-        for i in range(number_of_newproperty):
-            Sabra_property_name=map_property_list[i]
-            col1,col2=st.columns(2) 
-            with col1:
-                st.write(Sabra_property_name)
-            with col2: 
-                new_sheetname[i]=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name),key=Sabra_property_name)
-        submitted = st.form_submit_button("Submit") 
-        if submitted:
-	    for i in range(len(map_property_list)):
-                if new_sheetname[i] and map_property_list[i]:
-                    entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
-                    st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
-        else:
-            st.stop()
+    if number_of_newproperty==0:
+        st.write("There is no new property. Please check your mapping below:")
+        st.markdown(entity_mapping)
+	return entity_mapping
+    else:
+        new_sheetname = [None] * number_of_newproperty
+        with st.form(key="Mapping Properties"):
+            for i in range(number_of_newproperty):
+                Sabra_property_name=map_property_list[i]
+                col1,col2=st.columns(2) 
+                with col1:
+                    st.write(Sabra_property_name)
+                with col2: 
+                    new_sheetname[i]=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name),key=Sabra_property_name)
+            submitted = st.form_submit_button("Submit") 
+            if submitted:
+	        for i in range(len(map_property_list)):
+                    if new_sheetname[i] and map_property_list[i]:
+                        entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
+                        st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
+            else:
+                st.stop()
     Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
     return entity_mapping
 
