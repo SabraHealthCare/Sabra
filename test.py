@@ -440,7 +440,7 @@ def Manage_New_Property_Mapping():
         
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
-        col1,col2,col3,col4=st.columns([2,1,1,1])
+        col1,col2,col3,col4=st.columns([4,3,3,3])
         with col1:
             st.write("Property Name")
         with col2:
@@ -450,7 +450,7 @@ def Manage_New_Property_Mapping():
         with col4:
             st.write("Sheetname of Balance sheet")  
         for i in range(entity_mapping.shape[0]):
-            col1,col2,col3,col4=st.columns([2,1,1,1])
+            col1,col2,col3,col4=st.columns([4,3,3,3])
             with col1:
                 st.write("")
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
