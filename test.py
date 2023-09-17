@@ -429,15 +429,10 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
 
 #@st.cache_data(experimental_allow_widgets=True)
 def Manage_New_Property_Mapping(operator):
-    #sheet_type: "Sheet_Name" or "Sheet_Name_Occupancy"
-    sheet_type="Sheet_Name"
     global entity_mapping
-    # map property-sheetname
     #all the properties are supposed to be in entity_mapping. 
    
-    entity_mapping_update=entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]]
-    download_report(entity_mapping_update,"{} properties mapping".format(operator))
-    st.write(entity_mapping_update)   
+    entity_mapping_updation=pd.DataFrame(columns=["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"])
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
         col1,col2,col3,col4=st.columns([4,3,3,3])
@@ -446,23 +441,34 @@ def Manage_New_Property_Mapping(operator):
         with col2:
             st.write("P&L Sheetname")    
         with col3: 
-            st.write("Census Sheetname")    
+            st.write("Occupancy Sheetname")    
         with col4:
             st.write("Balance sheet Sheetname")  
         for i in range(entity_mapping.shape[0]):
             col1,col2,col3,col4=st.columns([4,3,3,3])
             with col1:
                 st.write("")
-                st.write(entity_mapping_update.loc[i,"Property_Name"])
+                st.write(entity_mapping_updation.loc[i,"Property_Name"])
             with col2:
-                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name"],key="P&L"+str(i))    
-                if not entity_mapping_update.loc[i,"Sheet_Name"]:
-                    entity_mapping_update.loc[i,"Sheet_Name"]=entity_mapping.loc[i,"Sheet_Name"]                 	
+                entity_mapping_updation.loc[i,"Sheet_Name"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name"],key="P&L"+str(i))    
+                       	
             with col3: 
-                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))    
-            with col4:
+                entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))    
+                
+	    with col4:
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
-        submitted = st.form_submit_button("Submit") 
+                
+	submitted = st.form_submit_button("Submit")
+	if submitted:
+            for i in range(entity_mapping.shape[0]):
+                if not entity_mapping_updation.loc[i,"Sheet_Name"]:
+                    entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"]  
+		if not entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]:
+                    entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
+		if not entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
+                    entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
+        st.write(entity_mapping)
+	download_report(entity_mapping_update,"{} properties mapping".format(operator))
     if submitted:
         entity_mapping_update=entity_mapping_update.combine_first(entity_mapping)
         st.write(entity_mapping_update)
