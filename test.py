@@ -452,14 +452,13 @@ def Manage_New_Property_Mapping(operator):
                 st.write(entity_mapping.loc[i,"Property_Name"])
             with col2:
                 entity_mapping_updation.loc[i,"Sheet_Name"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name"],key="P&L"+str(i))    
-                       	
             with col3: 
                 entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))     
             with col4:
                 entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
-                
         submitted = st.form_submit_button("Submit")
     if submitted:
+        st.write("entity_mapping_updation",entity_mapping_updation)
         for i in range(entity_mapping.shape[0]):
             if not entity_mapping_updation.loc[i,"Sheet_Name"]:
                 entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"]  
