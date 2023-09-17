@@ -452,6 +452,7 @@ def Manage_New_Property_Mapping():
         for i in range(entity_mapping.shape[0]):
             col1,col2,col3,col4=st.columns([2,1,1,1])
             with col1:
+                st.write("")
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
             with col2:
                 entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("",key="P&L"+str(i))    
@@ -931,10 +932,10 @@ if choice=="Upload P&L" and operator!='select operator':
     time.sleep(200)               
 	
 elif choice=="Manage Mapping" and operator!='select operator':
-    st.subheader("Manage Property Mapping(Not done yet....)")
-    entity_mapping=Manage_New_Property_Mapping()
-    st.subheader("Manage account Mapping")
-    account_mapping=Manage_Account_Mapping()
+    with st.expander("Manage Property Mapping" ,expanded=True):
+        entity_mapping=Manage_New_Property_Mapping()
+    with st.expander("Manage account Mapping",expanded=True):
+        account_mapping=Manage_Account_Mapping()
 
     with st.expander("View Sabra-{} Property Mapping".format(operator)):
         st.write(entity_mapping)
