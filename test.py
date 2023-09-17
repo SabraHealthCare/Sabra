@@ -171,7 +171,7 @@ def Identify_Tenant_Account_Col(PL,sheet_name):
     st.error("Can't identify accounts column in sheet—— '"+sheet_name+"'")
     st.stop()
 
-@st.cache_data
+
 def download_report(df,button_display):
     download_file=df.to_csv(index=False).encode('utf-8')
     st.download_button(label="Download "+button_display,data=download_file,file_name=operator+" "+button_display+".csv",mime="text/csv")
@@ -224,10 +224,9 @@ def Month_continuity_check(month_list):
         inv=[int(month_list[month_i+1])-int(month_list[month_i]) for month_i in range(month_len-1) ]
         #there are at most two types of difference in the month list which are in 1,-1,11,-11 
         if  len(set(inv))<=2 and all([x in [1,-1,11,-11] for x in set(inv)]):
-            #Month continuity confirmed. identify it as month row
-            return True
+            return True  # Month list is continous 
         else:
-            return False
+            return False # Month list is not continous 
             
 def Year_continuity_check(year_list):
     inv=[]
@@ -238,8 +237,7 @@ def Year_continuity_check(year_list):
     else:
         inv=[int(year_list[year_i+1])-int(year_list[year_i]) for year_i in range(year_len-1)]
         if len(set(inv))<=2 and all([x in [1,0,-1] for x in set(inv)]):
-            #year continuity confirmed, it is year row
-            return True        
+            return True         #years are continous
         else:
             return False
 
@@ -259,8 +257,7 @@ def Add_year_to_header(month_list):
      
     year_change=0     
     # month decending  #and available_month[0]<today.month
-    if (available_month[0]>available_month[1] and available_month[0]!=12) or \
-    (available_month[0]==1 and available_month[1]==12) : 
+    if (available_month[0]>available_month[1] and available_month[0]!=12) or (available_month[0]==1 and available_month[1]==12) : 
         date_of_assumption=datetime.strptime(str(available_month[0])+"/01/"+str(current_year),'%m/%d/%Y').date()
         if date_of_assumption<today and date_of_assumption.month<today.month:
             report_year_start=current_year
@@ -271,9 +268,8 @@ def Add_year_to_header(month_list):
             if i<len(available_month)-1 and available_month[i+1]==12:
                 year_change+=1
             
-    # month ascending   
-    elif (available_month[0]<available_month[1] and available_month[0]!=12) \
-        or (available_month[0]==12 and available_month[1]==1): #and int(available_month[-1])<today.month
+    # month ascending
+    elif (available_month[0]<available_month[1] and available_month[0]!=12) or (available_month[0]==12 and available_month[1]==1): #and int(available_month[-1])<today.month
         date_of_assumption=datetime.strptime(str(available_month[-1])+"/01/"+str(current_year),'%m/%d/%Y').date()    
         if date_of_assumption<today:
             report_year_start=current_year
@@ -317,7 +313,7 @@ def Identify_Month_Row(PL,tenantAccount_col_no,sheet_name):
         month_count.append(len(valid_month))
         year_count.append(len(valid_year))
         
-    # didn't find month keyword in any rows
+    # can't find month keyword in any rows
     if all(map(lambda x:x==0,month_count)):
         st.error("Can't identify month/year columns in sheet——'"+sheet_name+"'")   
         st.stop()
@@ -350,7 +346,8 @@ def Identify_Month_Row(PL,tenantAccount_col_no,sheet_name):
                     # all the year rows are not valid, add year to month
                     else:
                         continue
-                    # all the year rows are not valid, add year to month
+                
+		# all the year rows are not valid, add year to month
                 year_table.iloc[year_sort_index[year_index_i],]=Add_year_to_header(list(month_table.iloc[month_sort_index[month_index_i],]))
                 PL_date_header=year_table.iloc[year_sort_index[year_index_i],].apply(lambda x:str(int(x)))+\
                 month_table.iloc[month_sort_index[month_index_i],].apply(lambda x:"" if x==0 else "0"+str(int(x)) if x<10 else str(int(x)))
@@ -437,32 +434,28 @@ def Manage_New_Property_Mapping(map_property_list=[]):
     global entity_mapping
     # map property-sheetname
     #all the new properties are supposed to be in entity_mapping. 
-    #ask operator to map all the properties with blank sheet_name in entity_mapping
+    #ask operator to map all the properties with blank sheet_name in entity_mapping, if they said no, skip
 
     if map_property_list==[]:
         map_property_list=list(entity_mapping[entity_mapping[sheet_type]!=entity_mapping[sheet_type]]["Property_Name"])
-
-    for i in range(len(map_property_list)):
-        Sabra_property_name=map_property_list[i]
-        with st.form(key=Sabra_property_name):
+    number_of_newproperty=len(map_property_list)
+    new_sheetname = [None] * number_of_newproperty
+    with st.form(key="Mapping Properties"):
+        for i in range(number_of_newproperty):
+            Sabra_property_name=map_property_list[i]
             col1,col2=st.columns(2) 
             with col1:
                 st.write(Sabra_property_name)
             with col2: 
-                new_sheetname=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name))
-            submitted = st.form_submit_button("Submit")
-            
-            if submitted:
-                if new_sheetname and Sabra_property_name:
-                    entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname        
+                new_sheetname[i]=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name),key=Sabra_property_name)
+        submitted = st.form_submit_button("Submit") 
+        if submitted:
+	    for i in range(len(map_property_list)):
+                if new_sheetname[i] and map_property_list[i]:
+                    entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
                     st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
-                    
-                elif not new_sheetname:
-                    st.warning("Please enter sheet name")
-                    st.stop()
- 
-            else:
-                st.stop()
+        else:
+            st.stop()
     Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
     return entity_mapping
 
