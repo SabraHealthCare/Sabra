@@ -462,8 +462,8 @@ def Manage_New_Property_Mapping(operator):
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit") 
     if submitted:
-        entity_mapping=entity_mapping.combine_first(entity_mapping_update)
-        st.write(entity_mapping)
+        entity_mapping_update=entity_mapping_update.combine_first(entity_mapping)
+        st.write(entity_mapping_update)
         #entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
         #st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
             #Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
