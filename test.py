@@ -448,13 +448,12 @@ def Manage_New_Property_Mapping(operator):
             col1,col2,col3,col4=st.columns([4,3,3,3])
             with col1:
                 st.write("")
-                st.write(entity_mapping_updation.loc[i,"Property_Name"])
+                st.write(entity_mapping.loc[i,"Property_Name"])
             with col2:
                 entity_mapping_updation.loc[i,"Sheet_Name"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name"],key="P&L"+str(i))    
                        	
             with col3: 
-                entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))    
-                
+                entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))     
             with col4:
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
                 
