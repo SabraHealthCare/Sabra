@@ -465,8 +465,8 @@ def Manage_New_Property_Mapping():
         st.write(entity_mapping_update)
         #entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
         #st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
-    Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
-    return entity_mapping
+        Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
+        return entity_mapping
 
 @st.cache_data(experimental_allow_widgets=True)
 def Manage_Account_Mapping(new_tenant_account="Enter tenant account"):
