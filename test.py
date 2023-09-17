@@ -466,8 +466,8 @@ def Manage_New_Property_Mapping(operator):
                 entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
             if not entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
                 entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
-        st.write(entity_mapping)
-        download_report(entity_mapping_update,"{} properties mapping".format(operator))
+        st.write(entity_mapping["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"])
+        download_report(entity_mapping["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"],"{} properties mapping".format(operator))
        
         return entity_mapping
     else:
