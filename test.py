@@ -427,29 +427,38 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
          data = BytesIO(tmp.read())
     s3.upload_fileobj(data,bucket,key)
 
-
+@st.cache_data(experimental_allow_widgets=True)
 def Manage_New_Property_Mapping():
     #sheet_type: "Sheet_Name" or "Sheet_Name_Occupancy"
     sheet_type="Sheet_Name"
     global entity_mapping
     # map property-sheetname
     #all the properties are supposed to be in entity_mapping. 
-    st.write("Current mapping:")
+   
     entity_mapping_update=entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]]
-    st.markdown(entity_mapping_update.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+    download_report(entity_mapping_update,"{} properties mapping".format(operator))
         
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
+        col1,col2,col3,col4=st.columns(4)
+        with col1:
+                st.write("Property Name")
+            with col2:
+                st.write("Sheetname of P&L")    
+            with col3: 
+                st.write("Sheetname of Census")    
+            with col4:
+                st.write("Sheetname of Balance sheet")  
         for i in range(entity_mapping.shape[0]):
             col1,col2,col3,col4=st.columns(4)
             with col1:
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
             with col2:
-                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("Enter sheetname of P&L",key="P&L"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input(key="P&L"+str(i))    
             with col3: 
-                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("Enter sheetname of Census",key="Census"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input(key="Census"+str(i))    
             with col4:
-                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("Enter sheetname of Balance Sheet",key="BS"+str(i)) 
+                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input(key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit") 
     if submitted:
         st.write(entity_mapping_update)
