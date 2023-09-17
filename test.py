@@ -458,14 +458,14 @@ def Manage_New_Property_Mapping(operator):
             with col4:
                 entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
                 
-	submitted = st.form_submit_button("Submit")
-	if submitted:
-            for i in range(entity_mapping.shape[0]):
-                if not entity_mapping_updation.loc[i,"Sheet_Name"]:
-                    entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"]  
-		if not entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]:
-                    entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
-		if not entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
+        submitted = st.form_submit_button("Submit")
+    if submitted:
+        for i in range(entity_mapping.shape[0]):
+            if not entity_mapping_updation.loc[i,"Sheet_Name"]:
+                entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"]  
+	    if not entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]:
+                entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
+	    if not entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
                     entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
         st.write(entity_mapping)
 	download_report(entity_mapping_update,"{} properties mapping".format(operator))
