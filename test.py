@@ -455,7 +455,7 @@ def Manage_New_Property_Mapping(map_property_list=[]):
                     new_sheetname[i]=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name),key=Sabra_property_name)
             submitted = st.form_submit_button("Submit") 
             if submitted:
-	        for i in range(len(map_property_list)):
+                for i in range(len(map_property_list)):
                     if new_sheetname[i] and map_property_list[i]:
                         entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
                         st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
