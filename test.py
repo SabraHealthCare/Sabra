@@ -440,7 +440,7 @@ def Manage_New_Property_Mapping():
         
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
-        col1,col2,col3,col4=st.columns(4)
+        col1,col2,col3,col4=st.columns([2,1,1,1])
         with col1:
             st.write("Property Name")
         with col2:
@@ -450,15 +450,15 @@ def Manage_New_Property_Mapping():
         with col4:
             st.write("Sheetname of Balance sheet")  
         for i in range(entity_mapping.shape[0]):
-            col1,col2,col3,col4=st.columns(4)
+            col1,col2,col3,col4=st.columns([2,1,1,1])
             with col1:
                 st.write(entity_mapping_update.loc[i,"Property_Name"])
             with col2:
-                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input(key="P&L"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("",key="P&L"+str(i))    
             with col3: 
-                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input(key="Census"+str(i))    
+                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",key="Census"+str(i))    
             with col4:
-                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input(key="BS"+str(i)) 
+                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit") 
     if submitted:
         st.write(entity_mapping_update)
