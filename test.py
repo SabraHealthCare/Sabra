@@ -931,8 +931,8 @@ if choice=="Upload P&L" and operator!='select operator':
     time.sleep(200)               
 	
 elif choice=="Manage Mapping" and operator!='select operator':
-    with st.expander("Manage Property Mapping" ,expanded=True):
-        entity_mapping=Manage_New_Property_Mapping(operator)
+    #with st.expander("Manage Property Mapping" ,expanded=True):
+    entity_mapping=Manage_New_Property_Mapping(operator)
     with st.expander("Manage account Mapping",expanded=True):
         account_mapping=Manage_Account_Mapping()
 
