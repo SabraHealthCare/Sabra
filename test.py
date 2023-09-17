@@ -428,39 +428,34 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
     s3.upload_fileobj(data,bucket,key)
 
 
-def Manage_New_Property_Mapping(map_property_list=[]):
+def Manage_New_Property_Mapping():
     #sheet_type: "Sheet_Name" or "Sheet_Name_Occupancy"
     sheet_type="Sheet_Name"
     global entity_mapping
     # map property-sheetname
-    #all the new properties are supposed to be in entity_mapping. 
-    #ask operator to map all the properties with blank sheet_name in entity_mapping, if they said no, skip
-
-    if map_property_list==[]:
-        map_property_list=list(entity_mapping[entity_mapping[sheet_type]!=entity_mapping[sheet_type]]["Property_Name"])
-    number_of_newproperty=len(map_property_list)
-    if number_of_newproperty==0:
-        st.write("There is no new property. Please check your mapping below:")
-        st.markdown(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]].style.hide(axis="index").to_html(), unsafe_allow_html=True)
-        return entity_mapping
-    else:
-        new_sheetname = [None] * number_of_newproperty
-        with st.form(key="Mapping Properties"):
-            for i in range(number_of_newproperty):
-                Sabra_property_name=map_property_list[i]
-                col1,col2=st.columns(2) 
-                with col1:
-                    st.write(Sabra_property_name)
-                with col2: 
-                    new_sheetname[i]=st.text_input("Enter sheetname for '{}'".format(Sabra_property_name),key=Sabra_property_name)
-            submitted = st.form_submit_button("Submit") 
-            if submitted:
-                for i in range(len(map_property_list)):
-                    if new_sheetname[i] and map_property_list[i]:
-                        entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
-                        st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
-            else:
-                st.stop()
+    #all the properties are supposed to be in entity_mapping. 
+    st.write("Current mapping:")
+    entity_mapping_update=entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]]
+    st.markdown(entity_mapping_update.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        
+    number_of_property=entity_mapping.shape[0]
+    new_sheetname = [None] * number_of_newproperty
+    with st.form(key="Mapping Properties"):
+        for i in range(number_of_newproperty):
+            col1,col2,col3,col4=columns(4)
+            with col1:
+                st.write(entity_mapping_update.loc[i,"Property_Name"])
+            with col2:
+                entity_mapping_update.loc[i,"Sheet_Name"]=st.text_input("Enter sheetname of P&L",key="P&L"+str(i))    
+            with col3: 
+                entity_mapping_update.loc[i,"Sheet_Name_Occupancy"]=st.text_input("Enter sheetname of Census",key="Census"+str(i))    
+            with col4:
+                entity_mapping_update.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("Enter sheetname of Balance Sheet",key="BS"+str(i)) 
+        submitted = st.form_submit_button("Submit") 
+    if submitted:
+	st.write(entity_mapping_update)
+        #entity_mapping.loc[entity_mapping["Property_Name"]==Sabra_property_name,sheet_type]=new_sheetname[i]        
+        #st.succss("Sheet '{}' was mapped to property {}.".format(new_sheetname,Sabra_property_name))
     Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)            
     return entity_mapping
 
