@@ -932,7 +932,7 @@ elif choice=="Manage Mapping" and operator!='select operator':
         entity_mapping=Manage_Property_Mapping(operator)
     with st.expander("Manage Account Mapping",expanded=True):
         new_tenant_account=st.text_input("Enter new tenant account:")
-	if new_tenant_account:
+        if new_tenant_account:
             st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account)) 
             Sabra_main_account_value,Sabra_second_account_value=Manage_Account_Mapping(new_tenant_account)
             #insert new record to the bottom line of account_mapping
