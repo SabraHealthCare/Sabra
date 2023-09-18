@@ -51,6 +51,7 @@ def Initial_Paramaters(operator):
     if operator!='select operator':
         mapping_path="Mapping/"+operator+"/"+operator+"_Mapping.xlsx"
         PL_path=operator+"/"+operator+"_P&L.xlsx"
+	Discrepancy_path=operator+"/"+operator+"_Diecrepancy.xlsx"
         BPCpull =s3.get_object(Bucket=bucket_mapping, Key=mapping_path)
         BPC_pull=pd.read_excel(BPCpull['Body'].read(),sheet_name=sheet_name_BPC_pull,header=0)
         BPC_pull=BPC_pull.set_index(["ENTITY","ACCOUNT"])
@@ -729,6 +730,8 @@ def View_Discrepancy():
             		required =False)
 		}) 
         download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
+        download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
+	Save_File_toS3(edited_diff_BPC_PL,bucket_PL,PL_path)
         return edited_diff_BPC_PL
     else:
         st.success("All previous data in P&L ties with Sabra data")
