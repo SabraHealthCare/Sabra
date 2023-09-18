@@ -453,7 +453,12 @@ def Manage_Property_Mapping(operator):
                 entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Occupancy"],key="Census"+str(i))     
             with col4:
                 entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
-        submitted = st.form_submit_button("Submit")
+            col1,col2=st.columns(2)	  
+            with col1:
+                submitted = st.form_submit_button("Submit")
+            with col2:    
+                if submitted:
+                    st.markdown(":white_check_mark: :green[Sheetname mapping updated]")
     if submitted:
         for i in range(entity_mapping.shape[0]):
             if entity_mapping_updation.loc[i,"Sheet_Name"]:
@@ -462,7 +467,7 @@ def Manage_Property_Mapping(operator):
                 entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
             if  entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
                 entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
-        st.write(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]])
+        
         download_report(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]],"{} properties mapping".format(operator))
         # update account_mapping in S3     
         Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)    
