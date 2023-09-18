@@ -457,7 +457,6 @@ def Manage_Property_Mapping(operator):
                 entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]=st.text_input("",placeholder =entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"],key="BS"+str(i)) 
         submitted = st.form_submit_button("Submit")
     if submitted:
-        st.write("entity_mapping_updation",entity_mapping_updation)
         for i in range(entity_mapping.shape[0]):
             if entity_mapping_updation.loc[i,"Sheet_Name"]:
                 entity_mapping.loc[i,"Sheet_Name"]=entity_mapping_updation.loc[i,"Sheet_Name"] 
@@ -465,17 +464,19 @@ def Manage_Property_Mapping(operator):
                 entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
             if  entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
                 entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
-        st.write(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]])
+        
         download_report(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]],"{} properties mapping".format(operator))
-       
         return entity_mapping
 
 @st.cache_data(experimental_allow_widgets=True)
 def Manage_Account_Mapping(new_tenant_account="Enter tenant account"):
-    if new_tenant_account=="Enter tenant account":
-        new_tenant_account=[st.text_input("Enter new tenant account:")]
-    else:
+    if new_tenant_account!="Enter tenant account":
+	# add new account found in P&L process
         st.markdown("#### Map **'{}'** to Sabra account".format(new_tenant_account)) 
+    else:
+	# add new account in "Manage mapping"
+        new_tenant_account=st.text_input("Enter new tenant account:")
+    
     with st.form(key=new_tenant_account):
         col1,col2=st.columns(2) 
         with col1:
