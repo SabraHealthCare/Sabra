@@ -31,6 +31,7 @@ sheet_name_account_mapping="Account_Mapping"
 sheet_name_entity_mapping="Property_Mapping"
 sheet_name_BPC_pull="BPC_pull"
 sheet_name_format='Format'
+sheet_name_discrepancy="Discrepancy_Review"
 bucket_mapping="sabramapping"
 bucket_PL="operatorpl"
 
@@ -51,7 +52,7 @@ def Initial_Paramaters(operator):
     if operator!='select operator':
         mapping_path="Mapping/"+operator+"/"+operator+"_Mapping.xlsx"
         PL_path=operator+"/"+operator+"_P&L.xlsx"
-        Discrepancy_path=operator+"/"+operator+"_Diecrepancy.xlsx"
+        Discrepancy_path="Total_Diecrepancy_Review.xlsx"
         BPCpull =s3.get_object(Bucket=bucket_mapping, Key=mapping_path)
         BPC_pull=pd.read_excel(BPCpull['Body'].read(),sheet_name=sheet_name_BPC_pull,header=0)
         BPC_pull=BPC_pull.set_index(["ENTITY","ACCOUNT"])
@@ -414,14 +415,20 @@ def Save_File_toS3(uploaded_file, bucket, key):
         st.error("File can't be uploaded.")
         return False   
     
-def Update_Sheet_inS3(bucket,key,sheet_name,df):  
+def Update_Sheet_inS3(bucket,key,sheet_name,df,how="replace"):  
     mapping_file =s3.get_object(Bucket=bucket, Key=key)
     workbook = load_workbook(BytesIO(mapping_file['Body'].read()))
+    if how=="append":
+        original_df=pd.read_excel(mapping_file['Body'].read(), sheet_name=sheet_name)
+        # remove original discrepancy and comments
+	original_df = original_df.drop(original_df[original_df['Operator'] == operator].index)
+	# update to new discrepancy and comments
+        df = pd.concat([original_df,df]).reset_index(drop=True)
     workbook.remove(workbook[sheet_name])
     new_worksheet = workbook.create_sheet(sheet_name)
     for r in dataframe_to_rows(df, index=False, header=True):
         new_worksheet.append(r)
-    
+	    
     with NamedTemporaryFile() as tmp:
          workbook.save(tmp.name)
          data = BytesIO(tmp.read())
@@ -729,9 +736,10 @@ def View_Discrepancy():
 			disabled =False,
             		required =False)
 		}) 
-        #download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
+        diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)
         download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
         Save_File_toS3(edited_diff_BPC_PL,bucket_PL,Discrepancy_path)
+	Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append")    
         return edited_diff_BPC_PL
     else:
         st.success("All previous data in P&L ties with Sabra data")
