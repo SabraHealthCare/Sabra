@@ -469,7 +469,6 @@ def Manage_Property_Mapping(operator):
 
 @st.cache_data(experimental_allow_widgets=True)
 def Manage_Account_Mapping(new_tenant_account):
-    st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account)) 
     with st.form(key=new_tenant_account):
         col1,col2=st.columns(2) 
         with col1:
@@ -786,6 +785,7 @@ def PL_Process_Main(entity_i,sheet_type):
             if len(new_tenant_account_list)>0:
                 st.warning("Please complete mapping for below P&L accounts:")
                 for i in range(len(new_tenant_account_list)):
+		    st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account_list[i])) 
                     Sabra_main_account_value,Sabra_second_account_value=Manage_Account_Mapping(new_tenant_account_list[i])
                     #insert new record to the bottom line of account_mapping
                     account_mapping.loc[len(account_mapping.index)]=[Sabra_main_account_value,Sabra_second_account_value,new_tenant_account_list[i],new_tenant_account_list[i].upper(),"N"]           
@@ -932,8 +932,10 @@ elif choice=="Manage Mapping" and operator!='select operator':
         entity_mapping=Manage_Property_Mapping(operator)
     with st.expander("Manage Account Mapping",expanded=True):
         new_tenant_account=st.text_input("Enter new tenant account:")
-        Sabra_main_account_value,Sabra_second_account_value=Manage_Account_Mapping(new_tenant_account)
-        #insert new record to the bottom line of account_mapping
-        account_mapping.loc[len(account_mapping.index)]=[Sabra_main_account_value,Sabra_second_account_value,new_tenant_account_list[i],new_tenant_account_list[i].upper(),"N"]   
-        Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_account_mapping,account_mapping)
+	if new_tenant_account:
+            st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account)) 
+            Sabra_main_account_value,Sabra_second_account_value=Manage_Account_Mapping(new_tenant_account)
+            #insert new record to the bottom line of account_mapping
+            account_mapping.loc[len(account_mapping.index)]=[Sabra_main_account_value,Sabra_second_account_value,new_tenant_account_list[i],new_tenant_account_list[i].upper(),"N"]   
+            Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_account_mapping,account_mapping)
 time.sleep(5000) 
