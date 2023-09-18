@@ -40,7 +40,7 @@ def get_operator_list(bucket_mapping):
     operator_list = pd.read_excel(operatorlist['Body'].read(), sheet_name='Operator_List')
     return operator_list
 operator_list=get_operator_list(bucket_mapping)
-col1,col2=st.columns([1,1,5]) 
+col1,col2,col3=st.columns([1,1,5]) 
 with col1:
     st.subheader("Operator name:")
 with col2:
