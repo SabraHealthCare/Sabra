@@ -421,7 +421,7 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df,how="replace"):
     if how=="append":
         original_df=pd.read_excel(mapping_file['Body'].read(), sheet_name=sheet_name)
         # remove original discrepancy and comments
-	original_df = original_df.drop(original_df[original_df['Operator'] == operator].index)
+        original_df = original_df.drop(original_df[original_df['Operator'] == operator].index)
 	# update to new discrepancy and comments
         df = pd.concat([original_df,df]).reset_index(drop=True)
     workbook.remove(workbook[sheet_name])
