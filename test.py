@@ -465,6 +465,8 @@ def Manage_Property_Mapping(operator):
                 entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
         st.write(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]])
         download_report(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]],"{} properties mapping".format(operator))
+        # update account_mapping in S3     
+        Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)    
         return entity_mapping
 
 @st.cache_data(experimental_allow_widgets=True)
