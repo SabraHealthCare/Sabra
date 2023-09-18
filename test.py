@@ -804,8 +804,7 @@ def PL_Process_Main(entity_i,sheet_type):
 	    
             max_month_cols=str(max(list(PL.columns)))
 	    # check the latest reporting month
-            if latest_month=="2023":
-                st.write(latest_month,"latest_month")		    
+            if latest_month=="2023":	    
                 latest_month=max_month_cols
                 
                 col1,col2,col3=st.columns([4,1,6])
