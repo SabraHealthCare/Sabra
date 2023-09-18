@@ -714,6 +714,7 @@ def View_Discrepancy():
         diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
         diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
         diff_BPC_PL['Type comments below']=""
+        diff_BPC_PL['Operator']=operator
   
         edited_diff_BPC_PL = st.data_editor(
 	diff_BPC_PL,
