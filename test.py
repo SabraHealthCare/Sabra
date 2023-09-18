@@ -737,7 +737,8 @@ def View_Discrepancy():
             		required =False)
 		}) 
         diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)
-        download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
+        download_report(diff_BPC_PL,"test")
+        #download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
         Save_File_toS3(edited_diff_BPC_PL,bucket_PL,Discrepancy_path)
         Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append")    
         return edited_diff_BPC_PL
