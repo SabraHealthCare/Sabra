@@ -785,7 +785,7 @@ def PL_Process_Main(entity_i,sheet_type):
             if len(new_tenant_account_list)>0:
                 st.warning("Please complete mapping for below P&L accounts:")
                 for i in range(len(new_tenant_account_list)):
-		    st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account_list[i])) 
+                    st.markdown("## Map **'{}'** to Sabra account".format(new_tenant_account_list[i])) 
                     Sabra_main_account_value,Sabra_second_account_value=Manage_Account_Mapping(new_tenant_account_list[i])
                     #insert new record to the bottom line of account_mapping
                     account_mapping.loc[len(account_mapping.index)]=[Sabra_main_account_value,Sabra_second_account_value,new_tenant_account_list[i],new_tenant_account_list[i].upper(),"N"]           
