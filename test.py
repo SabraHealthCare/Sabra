@@ -41,8 +41,9 @@ def get_operator_list(bucket_mapping):
     return operator_list
 operator_list=get_operator_list(bucket_mapping)
 
-
-operator= st.selectbox('Operator Name',(operator_list))
+col1,col2=st.columns(2)
+with col1:
+    operator= st.selectbox('Operator Name',(operator_list))
 
 @st.cache_data
 def Initial_Paramaters(operator):
