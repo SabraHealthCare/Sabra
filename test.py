@@ -731,7 +731,7 @@ def View_Discrepancy():
 		}) 
         download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
         download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
-	Save_File_toS3(edited_diff_BPC_PL,bucket_PL,PL_path)
+        Save_File_toS3(edited_diff_BPC_PL,bucket_PL,Discrepancy_path)
         return edited_diff_BPC_PL
     else:
         st.success("All previous data in P&L ties with Sabra data")
