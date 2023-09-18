@@ -69,8 +69,8 @@ def Initial_Paramaters(operator):
 
     else:
         st.stop()
-    return PL_path,mapping_path,BPC_pull,format_table,month_dic,year_dic
-PL_path,mapping_path,BPC_pull,format_table,month_dic,year_dic=Initial_Paramaters(operator)
+    return PL_path,Discrepancy_path,mapping_path,BPC_pull,format_table,month_dic,year_dic
+PL_path,Discrepancy_path,mapping_path,BPC_pull,format_table,month_dic,year_dic=Initial_Paramaters(operator)
 
 @st.cache_resource
 def Initial_Mapping(operator):
@@ -730,7 +730,7 @@ def View_Discrepancy():
             		required =False)
 		}) 
         #download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
-        download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff"]],"Discrepancy review")
+        download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
         Save_File_toS3(edited_diff_BPC_PL,bucket_PL,Discrepancy_path)
         return edited_diff_BPC_PL
     else:
