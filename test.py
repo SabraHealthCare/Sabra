@@ -42,6 +42,7 @@ def get_operator_list(bucket_mapping):
 operator_list=get_operator_list(bucket_mapping)
 col1,col2,col3=st.columns([1,1,5]) 
 with col1:
+    st.write("")
     st.write("Operator name:")
 with col2:
     operator= st.selectbox(' ',(operator_list))
