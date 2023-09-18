@@ -416,14 +416,15 @@ def Save_File_toS3(uploaded_file, bucket, key):
         return False   
     
 def Update_Sheet_inS3(bucket,key,sheet_name,df,how="replace"):  
-    mapping_file =s3.get_object(Bucket=bucket, Key=key)
-    workbook = load_workbook(BytesIO(mapping_file['Body'].read()))
     if how=="append":
-        original_df=pd.read_excel(mapping_file['Body'].read(), sheet_name=sheet_name)
+        discrepancy_file =s3.get_object(Bucket=bucket, Key=key)
+        original_df=pd.read_excel(discrepancy_file['Body'].read(), sheet_name=sheet_name,header=0)
         # remove original discrepancy and comments
         original_df = original_df.drop(original_df[original_df['Operator'] == operator].index)
 	# update to new discrepancy and comments
         df = pd.concat([original_df,df]).reset_index(drop=True)
+    load_file =s3.get_object(Bucket=bucket, Key=key)
+    workbook = load_workbook(BytesIO(load_file['Body'].read()))
     workbook.remove(workbook[sheet_name])
     new_worksheet = workbook.create_sheet(sheet_name)
     for r in dataframe_to_rows(df, index=False, header=True):
