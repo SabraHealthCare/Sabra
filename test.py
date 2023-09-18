@@ -431,7 +431,6 @@ def Update_Sheet_inS3(bucket,key,sheet_name,df):
 def Manage_Property_Mapping(operator):
     global entity_mapping
     #all the properties are supposed to be in entity_mapping. 
-           
     entity_mapping_updation=pd.DataFrame(columns=["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"])
     number_of_property=entity_mapping.shape[0]
     with st.form(key="Mapping Properties"):
@@ -464,7 +463,7 @@ def Manage_Property_Mapping(operator):
                 entity_mapping.loc[i,"Sheet_Name_Occupancy"]=entity_mapping_updation.loc[i,"Sheet_Name_Occupancy"]
             if  entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"]:
                 entity_mapping.loc[i,"Sheet_Name_Balance_Sheet"]=entity_mapping_updation.loc[i,"Sheet_Name_Balance_Sheet"] 
-        
+        st.write(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]])
         download_report(entity_mapping[["Property_Name","Sheet_Name","Sheet_Name_Occupancy","Sheet_Name_Balance_Sheet"]],"{} properties mapping".format(operator))
         return entity_mapping
 
