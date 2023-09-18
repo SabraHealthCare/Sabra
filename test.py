@@ -51,7 +51,7 @@ def Initial_Paramaters(operator):
     if operator!='select operator':
         mapping_path="Mapping/"+operator+"/"+operator+"_Mapping.xlsx"
         PL_path=operator+"/"+operator+"_P&L.xlsx"
-	Discrepancy_path=operator+"/"+operator+"_Diecrepancy.xlsx"
+        Discrepancy_path=operator+"/"+operator+"_Diecrepancy.xlsx"
         BPCpull =s3.get_object(Bucket=bucket_mapping, Key=mapping_path)
         BPC_pull=pd.read_excel(BPCpull['Body'].read(),sheet_name=sheet_name_BPC_pull,header=0)
         BPC_pull=BPC_pull.set_index(["ENTITY","ACCOUNT"])
