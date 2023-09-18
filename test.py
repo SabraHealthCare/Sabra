@@ -931,8 +931,10 @@ if choice=="Upload P&L" and operator!='select operator':
 elif choice=="Manage Mapping" and operator!='select operator':
     
     with st.expander("Manage Property Mapping" ,expanded=True):
+        ChangeWidgetFontSize('Manage Property Mapping', '25px')
         entity_mapping=Manage_Property_Mapping(operator)
     with st.expander("Manage Account Mapping",expanded=True):
+        ChangeWidgetFontSize('Manage Account Mapping', '25px')
         col1,col2=st.columns(2)
         with col1:
             new_tenant_account=st.text_input("Enter new tenant account and press enter to apply:")
