@@ -40,12 +40,9 @@ def get_operator_list(bucket_mapping):
     operator_list = pd.read_excel(operatorlist['Body'].read(), sheet_name='Operator_List')
     return operator_list
 operator_list=get_operator_list(bucket_mapping)
-col1,col2,col3=st.columns([1,1,5]) 
-with col1:
-    st.write("")
-    st.write("Operator name:")
-with col2:
-    operator= st.selectbox(' ',(operator_list))
+
+
+operator= st.selectbox('Operator Name',(operator_list))
 
 @st.cache_data
 def Initial_Paramaters(operator):
