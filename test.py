@@ -737,19 +737,16 @@ def View_Discrepancy():
 			disabled =False,
             		required =False)
 		}) 
-        #diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
-         if diff_BPC_PL.shape[0]>0:
-                col1,col2=st.columns([1,5]) 
-                with col1:
-                    submit_com=st.button("Submit comments")
-                if submit_com:
-                    with col2:    
-                        st.markdown(":white_check_mark: :green[Comments uploaded]")	
-                    with col1:                        
-                        download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
-                        Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append") 
-	
-	    
+               #diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
+        col1,col2=st.columns([1,5]) 
+        with col1:
+            submit_com=st.button("Submit comments")
+        if submit_com:
+            with col2:    
+                st.markdown(":white_check_mark: :green[Comments uploaded]")
+                Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append") 
+        with col1:                        
+            download_report(diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
     else:
         st.success("All previous data in P&L ties with Sabra data")
 
