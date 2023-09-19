@@ -740,7 +740,7 @@ def View_Discrepancy(percent_discrepancy_accounts):
         if submit_com:
             with col2:  
                 with st.empty():
-                    st.markdown(":white_check_mark: :green[Comments uploaded]")
+                    st.markdown("✔️ :green[Comments uploaded]")
                     time.sleep(1)
                     st.write(" ")
                 Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,edited_diff_BPC_PL,"append") 
