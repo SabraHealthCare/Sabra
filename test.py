@@ -739,6 +739,7 @@ def View_Discrepancy():
 		}) 
         #diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
         return edited_diff_BPC_PL
+	    
     else:
         st.success("All previous data in P&L ties with Sabra data")
 
