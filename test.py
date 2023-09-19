@@ -32,7 +32,7 @@ with st.empty():
     for seconds in range(3):
         st.write(f"⏳ {seconds} seconds have passed")
         time.sleep(1)
-    #st.write("✔️ 1 minute over!")
+    st.write(" ")
 
 
 st.title("Sabra HealthCare Monthly Reporting App")
