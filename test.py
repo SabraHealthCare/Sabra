@@ -737,7 +737,9 @@ def View_Discrepancy(percent_discrepancy_accounts):
             submit_com=st.button("Submit comments")
         if submit_com:
             with col2:    
-                st.markdown(":white_check_mark: :green[Comments uploaded]")
+                st.success(":white_check_mark: :green[Comments uploaded]")
+                time.sleep(2) # Wait for 3 seconds
+                success.empty()
                 Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,edited_diff_BPC_PL,"append") 
             with col1:                        
                 download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
