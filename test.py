@@ -704,13 +704,12 @@ def View_Summary():
 		.format(precision=0,thousands=",").hide(axis="index").to_html(),unsafe_allow_html=True)
     download_report(latest_month_data,"{} {}-{} Reporting".format(operator,latest_month[4:6],latest_month[0:4]))
 
-@st.cache_data(experimental_allow_widgets=True)
+#@st.cache_data(experimental_allow_widgets=True)
 def View_Discrepancy(): 
     global diff_BPC_PL
     percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
     if diff_BPC_PL.shape[0]>0:
         st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
-    
         diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
         diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
         diff_BPC_PL['Type comments below']=""
@@ -738,8 +737,8 @@ def View_Discrepancy():
 			disabled =False,
             		required =False)
 		}) 
-        #diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
-        #st.write(edited_diff_BPC_PL)
+        diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
+        st.write(diff_BPC_PL)
         return diff_BPC_PL
     else:
         st.success("All previous data in P&L ties with Sabra data")
