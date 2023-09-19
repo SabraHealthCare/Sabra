@@ -616,7 +616,7 @@ def Mapping_PL_Sabra(PL,entity):
                 elif conversion[0]=="*":
                     PL.loc[i,month]= before_conversion*float(conversion.split("*")[0])
     PL=PL.drop(["Tenant_Formated_Account","Conversion"], axis=1)
-    st.write(PL.loc[PL["Sabra_Account"]=="L_ALZ","202303"])
+    st.write(PL)
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Property_Name"]=[property_name]*len(PL_with_detail.index)
     PL_with_detail["Entity"]=[entity]*len(PL_with_detail.index)
