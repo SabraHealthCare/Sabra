@@ -552,7 +552,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         # update account_mapping in S3     
         Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)    
     
-
+    st.write(PL)
     # Start checking process
     st.write("********Start to check property—'"+property_name+"' in sheet '"+sheet_name+"'********" )  
 	    
@@ -583,7 +583,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     PL=PL.loc[:,(PL!= 0).any(axis=0)]
     # remove rows with all nan/0 value
     PL=PL.loc[(PL!= 0).any(axis=1),:]
-	
+    st.write(PL)
     return PL
 
 @st.cache_data
@@ -597,10 +597,10 @@ def Mapping_PL_Sabra(PL,entity):
     
     PL.index.name="Tenant_Account"
     PL["Tenant_Formated_Account"]=list(map(lambda x:x.upper() if type(x)==str else x,PL.index))
-    st.write(PL)
+ 
     PL=pd.concat([PL.merge(second_account_mapping,on="Tenant_Formated_Account",how='right'),PL.merge(main_account_mapping[main_account_mapping["Sabra_Account"]==main_account_mapping["Sabra_Account"]]\
                                             [["Sabra_Account","Tenant_Formated_Account","Tenant_Account","Conversion"]],on="Tenant_Formated_Account",how='right')])
-    st.write(PL)
+  
     PL=PL.reset_index(drop=True)
     month_cols=list(filter(lambda x:str(x[0:2])=="20",PL.columns))
     for i in range(len(PL.index)):
@@ -794,7 +794,7 @@ def PL_Process_Main(entity_i,sheet_type):
     sheet_name=str(entity_mapping.loc[entity_i,sheet_type])
     if True:
             PL=Sheet_Process(entity_i,sheet_type,sheet_name)
-            st.write(PL)
+         
             # mapping new tenant accounts
             new_tenant_account_list=list(filter(lambda x:x.upper().strip() not in list(account_mapping["Tenant_Formated_Account"]),PL.index))
             
@@ -815,7 +815,7 @@ def PL_Process_Main(entity_i,sheet_type):
                         st.warning("Warning: There are more than one '{}' accounts in sheet '{}'. They will be summed up by default.".format(dup,sheet_name))
 
             PL,PL_with_detail=Mapping_PL_Sabra(PL,entity_mapping.loc[entity_i,"ENTITY"])
-	    
+            
             max_month_cols=str(max(list(PL.columns)))
 	    # check the latest reporting month
             if latest_month=="2023":	    
