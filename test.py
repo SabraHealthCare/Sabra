@@ -19,6 +19,13 @@ import streamlit.components.v1 as components
 from calendar import monthrange
 s3 = boto3.client('s3')
 
+
+#---------------------------define parameters--------------------------
+st.set_page_config(
+    page_title="Sabra HealthCare monthly reporting App",
+    page_icon="🧊",
+    initial_sidebar_state="expanded",
+    layout="wide")
 placeholder = st.empty()
 
 # Replace the placeholder with some text:
@@ -34,13 +41,6 @@ with placeholder.container():
 
 # Clear all those elements:
 placeholder.empty()
-#---------------------------define parameters--------------------------
-st.set_page_config(
-    page_title="Sabra HealthCare monthly reporting App",
-    page_icon="🧊",
-    initial_sidebar_state="expanded",
-    layout="wide")
-
 st.title("Sabra HealthCare Monthly Reporting App")
 sheet_name_account_mapping="Account_Mapping"
 sheet_name_entity_mapping="Property_Mapping"
