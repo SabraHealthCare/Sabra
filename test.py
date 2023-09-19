@@ -590,14 +590,17 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
 def Mapping_PL_Sabra(PL,entity):
     # remove no need to map from account_mapping
     main_account_mapping=account_mapping.loc[list(map(lambda x:x==x and x.upper()!='NO NEED TO MAP',account_mapping["Sabra_Account"])),:]
+    st.write(main_account_mapping)
     #concat main accounts with second accounts
     second_account_mapping=account_mapping.loc[(account_mapping["Sabra_Second_Account"]==account_mapping["Sabra_Second_Account"])&(account_mapping["Sabra_Second_Account"]!="NO NEED TO MAP")][["Sabra_Second_Account","Tenant_Formated_Account","Tenant_Account","Conversion"]].\
                            rename(columns={"Sabra_Second_Account": "Sabra_Account"})
+    st.write(second_account_mapping)
     PL.index.name="Tenant_Account"
     PL["Tenant_Formated_Account"]=list(map(lambda x:x.upper() if type(x)==str else x,PL.index))
-
+    st.write(PL)
     PL=pd.concat([PL.merge(second_account_mapping,on="Tenant_Formated_Account",how='right'),PL.merge(main_account_mapping[main_account_mapping["Sabra_Account"]==main_account_mapping["Sabra_Account"]]\
                                             [["Sabra_Account","Tenant_Formated_Account","Tenant_Account","Conversion"]],on="Tenant_Formated_Account",how='right')])
+    st.write(PL)
     PL=PL.reset_index(drop=True)
     month_cols=list(filter(lambda x:str(x[0:2])=="20",PL.columns))
     for i in range(len(PL.index)):
@@ -608,7 +611,7 @@ def Mapping_PL_Sabra(PL,entity):
             for month in month_cols:
                 #st.write(month_cols)
                 before_conversion=PL.loc[i,month]
-                #st.write(PL)
+               
                 if before_conversion!=before_conversion:
                     continue
                 elif conversion=="/monthdays":		
@@ -616,7 +619,7 @@ def Mapping_PL_Sabra(PL,entity):
                 elif conversion[0]=="*":
                     PL.loc[i,month]= before_conversion*float(conversion.split("*")[0])
     PL=PL.drop(["Tenant_Formated_Account","Conversion"], axis=1)
-    st.write(PL)
+    
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Property_Name"]=[property_name]*len(PL_with_detail.index)
     PL_with_detail["Entity"]=[entity]*len(PL_with_detail.index)
