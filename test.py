@@ -29,7 +29,7 @@ st.set_page_config(
 placeholder = st.empty()
 
 with st.empty():
-    for seconds in range(60):
+    for seconds in range(5):
         st.write(f"⏳ {seconds} seconds have passed")
         time.sleep(3)
     st.write("✔️ 1 minute over!")
