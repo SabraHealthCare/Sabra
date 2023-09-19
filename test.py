@@ -518,6 +518,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     while(True):
         try:
             PL = pd.read_excel(uploaded_file,sheet_name=sheet_name,header=None)
+            st.write(PL)
             break
         except:
 	    # if there is no sheet name for sold property in P&L, continue to process next property
@@ -552,7 +553,6 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         # update account_mapping in S3     
         Update_Sheet_inS3(bucket_mapping,mapping_path,sheet_name_entity_mapping,entity_mapping)    
     
-    st.write(PL)
     # Start checking process
     st.write("********Start to check property—'"+property_name+"' in sheet '"+sheet_name+"'********" )  
 	    
