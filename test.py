@@ -517,6 +517,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     # read data from uploaded file
     count=0
     while(True):
+	    
         try:
             PL = pd.read_excel(uploaded_file,sheet_name=sheet_name,header=None)
             st.write(PL)
