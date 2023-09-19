@@ -704,17 +704,11 @@ def View_Summary():
 		.format(precision=0,thousands=",").hide(axis="index").to_html(),unsafe_allow_html=True)
     download_report(latest_month_data,"{} {}-{} Reporting".format(operator,latest_month[4:6],latest_month[0:4]))
 
-#@st.cache_data(experimental_allow_widgets=True)
-def View_Discrepancy(): 
+# can't use cache
+def View_Discrepancy(percent_discrepancy_accounts): 
     global diff_BPC_PL
-    percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
     if diff_BPC_PL.shape[0]>0:
         st.error("{0:.1f}% P&L data doesn't tie to Sabra data.  Please leave comments for each discrepancy in below table.".format(percent_discrepancy_accounts*100))
-        diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
-        diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
-        diff_BPC_PL['Type comments below']=""
-        diff_BPC_PL['Operator']=operator
-  
         edited_diff_BPC_PL = st.data_editor(
 	diff_BPC_PL,
 	width = 1200,
@@ -737,14 +731,13 @@ def View_Discrepancy():
 			disabled =False,
             		required =False)
 		}) 
-               #diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
-        col1,col2=st.columns([1,5]) 
+
+        col1,col2=st.columns([1,2]) 
         with col1:
             submit_com=st.button("Submit comments")
         if submit_com:
             with col2:    
                 st.markdown(":white_check_mark: :green[Comments uploaded]")
-                st.write(edited_diff_BPC_PL)
                 Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,edited_diff_BPC_PL,"append") 
             with col1:                        
                 download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
@@ -895,7 +888,14 @@ def Upload_Section(uploaded_file):
             diff_BPC_PL,diff_BPC_PL_detail=Compare_PL_Sabra(Total_PL,Total_PL_detail)
 	    # save uploaded tenant file to S3
             Save_File_toS3(uploaded_file,bucket_PL,PL_path)
-    return Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail
+            
+            if diff_BPC_PL.shape[0]>0:
+                percent_discrepancy_accounts=diff_BPC_PL.shape[0]/(BPC_Account.shape[0]*len(Total_PL.columns))
+                diff_BPC_PL=diff_BPC_PL.merge(BPC_Account,left_on="Sabra_Account",right_on="BPC_Account_Name",how="left")        
+                diff_BPC_PL=diff_BPC_PL.merge(entity_mapping, on="ENTITY",how="left")
+                diff_BPC_PL['Type comments below']=""
+                diff_BPC_PL['Operator']=operator
+    return Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts
 #----------------------------------website widges------------------------------------
 menu=["Upload P&L","Manage Mapping","Instructions"]
 choice=st.sidebar.selectbox("Menu", menu)
@@ -923,7 +923,7 @@ if choice=="Upload P&L" and operator!='select operator':
         global latest_month
         latest_month="2023"
         
-        Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail=Upload_Section(uploaded_file)
+        Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
 
 	    
         # 1 Summary
@@ -934,7 +934,7 @@ if choice=="Upload P&L" and operator!='select operator':
         # 2 Discrepancy of Historic Data
         with st.expander("Discrepancy for Historic Data",expanded=True):
             ChangeWidgetFontSize('Discrepancy for Historic Data', '25px')
-            View_Discrepancy()
+            View_Discrepancy(percent_discrepancy_accounts)
             View_Discrepancy_Detail()
     time.sleep(200)               
 	
