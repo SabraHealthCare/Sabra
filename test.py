@@ -933,11 +933,10 @@ if choice=="Upload P&L" and operator!='select operator':
                     submit_com=st.button("Submit comments")
                 with col2:    
                     if submit_com:
-                        st.markdown(":white_check_mark: :green[Comments uploaded]")
-			
-                download_report(diff_BPC_PL,"test")
-                #download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
-                Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append") 
+                        st.markdown(":white_check_mark: :green[Comments uploaded]")	
+                        download_report(diff_BPC_PL,"test")
+                        #download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
+                        Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,diff_BPC_PL,"append") 
             View_Discrepancy_Detail()
     time.sleep(200)               
 	
