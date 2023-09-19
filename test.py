@@ -738,7 +738,7 @@ def View_Discrepancy():
 			disabled =False,
             		required =False)
 		}) 
-        diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
+        edited_diff_BPC_PL=diff_BPC_PL.combine_first(edited_diff_BPC_PL)  
         st.write(diff_BPC_PL)
         return diff_BPC_PL
     else:
