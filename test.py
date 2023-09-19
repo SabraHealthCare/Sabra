@@ -28,13 +28,6 @@ st.set_page_config(
     layout="wide")
 placeholder = st.empty()
 
-with st.empty():
-    for seconds in range(3):
-        st.write(f"⏳ {seconds} seconds have passed")
-        time.sleep(1)
-    st.write(" ")
-
-
 st.title("Sabra HealthCare Monthly Reporting App")
 sheet_name_account_mapping="Account_Mapping"
 sheet_name_entity_mapping="Property_Mapping"
@@ -745,10 +738,11 @@ def View_Discrepancy(percent_discrepancy_accounts):
         with col1:
             submit_com=st.button("Submit comments")
         if submit_com:
-            with col2:    
-                st.success(":white_check_mark: :green[Comments uploaded]")
-                time.sleep(2) # Wait for 3 seconds
-                success.empty()
+            with col2:  
+                with st.empty():
+                    st.markdown(":white_check_mark: :green[Comments uploaded]")
+                    time.sleep(1)
+                    st.write(" ")
                 Update_Sheet_inS3(bucket_PL,Discrepancy_path,sheet_name_discrepancy,edited_diff_BPC_PL,"append") 
             with col1:                        
                 download_report(edited_diff_BPC_PL[["Property_Name","TIME","Sabra_Account_Full_Name","Sabra","P&L","Diff","Type comments below"]],"Discrepancy review")
@@ -933,7 +927,6 @@ if choice=="Upload P&L" and operator!='select operator':
         TENANT_ID=format_table["Tenant_ID"][0]
         global latest_month
         latest_month="2023"
-        
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
 
 	    
@@ -950,7 +943,6 @@ if choice=="Upload P&L" and operator!='select operator':
     time.sleep(200)               
 	
 elif choice=="Manage Mapping" and operator!='select operator':
-    
     with st.expander("Manage Property Mapping" ,expanded=True):
         ChangeWidgetFontSize('Manage Property Mapping', '25px')
         entity_mapping=Manage_Property_Mapping(operator)
