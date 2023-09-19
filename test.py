@@ -14,7 +14,6 @@ import streamlit.components.v1 as components
 from calendar import monthrange
 s3 = boto3.client('s3')
 
-
 #---------------------------define parameters--------------------------
 st.set_page_config(
     page_title="Sabra HealthCare monthly reporting App",
@@ -90,8 +89,6 @@ th_props = [('font-size', '14px'), ('text-align', 'left'),
 
 # Intialize a list of tuples containing the CSS styles for table data
 td_props = [('font-size', '14px'), ('text-align', 'left')]
-
-
 
 # Aggregate styles in a list
 styles = [dict(selector="th", props=th_props),dict(selector="td", props=td_props)]
@@ -290,6 +287,7 @@ def Add_year_to_header(month_list):
     return month_list  
 
 # search for the Month/year row and return row number
+
 @st.cache_data
 def Identify_Month_Row(PL,tenantAccount_col_no,sheet_name):
     PL_row_size=PL.shape[0]
@@ -618,6 +616,7 @@ def Mapping_PL_Sabra(PL,entity):
                 elif conversion[0]=="*":
                     PL.loc[i,month]= before_conversion*float(conversion.split("*")[0])
     PL=PL.drop(["Tenant_Formated_Account","Conversion"], axis=1)
+    st.write(PL.loc[PL["Sabra_Account"]=="L_ALZ","202303"])
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Property_Name"]=[property_name]*len(PL_with_detail.index)
     PL_with_detail["Entity"]=[entity]*len(PL_with_detail.index)
