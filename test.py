@@ -3,6 +3,7 @@ import numpy as np
 from datetime import datetime, timedelta,date
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+
 import streamlit as st
 import boto3
 from io import BytesIO
@@ -156,7 +157,7 @@ def Identify_Tenant_Account_Col(PL,sheet_name):
         match=[x in account_column for x in account_mapping["Tenant_Formated_Account"]]
         #If 20% of accounts match with account_mapping list, identify this col as tenant account.
         
-        if len(match)>0 and sum(x for x in match)/len(match)>0.1:
+        if len(match)>0 and (sum(x for x in match)/len(match)>0.1 or sum(x for x in match)>5):
             return tenantAccount_col_no  
         else:
             # it is wrong account column, continue search
