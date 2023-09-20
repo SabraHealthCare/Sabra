@@ -653,7 +653,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                 if abs(diff)>=0.05*max(abs(PL_value),abs(BPC_value)):
                     diff_single_record=pd.DataFrame({"TIME":timeid,"ENTITY":entity,"Sabra_Account":matrix,"Sabra":BPC_value,\
                                                      "P&L":PL_value,"Diff":diff},index=[0])
-                    
+                    st.write(diff_single_record)
                     diff_BPC_PL=pd.concat([diff_BPC_PL,diff_single_record],ignore_index=True)
 
                     diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
@@ -661,6 +661,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
+                    st.write(diff_detail_records)
                     #if there is no record in diff_detail_records, means there is no mapping
                     if diff_detail_records.shape[0]==0:
                         diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"Amount":0},index=[0])
