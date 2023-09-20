@@ -631,9 +631,8 @@ def Mapping_PL_Sabra(PL,entity):
     
 @st.cache_data
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
-    st.write("before drop index",PL_with_detail)
-    PL_with_detai=PL_with_detail.reset_index(level=2, drop=False)
-    st.write("drop index",PL_with_detail)
+    PL_with_detai=PL_with_detail.reset_index(level=["Tenant_Account"], drop=False)
+   
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
     diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","P&L Value","Diff","Sabra"])
     for entity in entity_mapping["ENTITY"]:
@@ -865,15 +864,12 @@ def Upload_Section(uploaded_file):
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
                     latest_month,PL_occ,PL_with_detail_occ=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
-                    st.write("PL_with_detail before",PL_with_detail)                    
-                    st.write("PL_with_detail_occ before",PL_with_detail_occ)
                     
                     PL=PL.combine_first(PL_occ)
                     # remove rows with all None value
                     #PL= PL.loc[(PL!= None).any(axis=1),:]
         
                     PL_with_detail=PL_with_detail.combine_first(PL_with_detail_occ)
-                    st.write("PL_with_detail after",PL_with_detail)
                     #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
 		# check if balance sheet data existed   
 		
@@ -882,15 +878,12 @@ def Upload_Section(uploaded_file):
                         PL=PL.combine_first(PL_BS)
                         # remove rows with all None value
                         #PL= PL.loc[(PL!= None).any(axis=1),:]
-                
                         PL_with_detail=PL_with_detail.combine_first(PL_with_detail_BS)
-                     
                         #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
                 
                 Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
                 Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
                 st.success("Property {} checked.".format(entity_mapping.loc[entity_i,"Property_Name"]))
-            
             
             # if Sheet_Name_Occupancy is available, process occupancy data separately
 	    # check if census data existed
