@@ -632,7 +632,7 @@ def Mapping_PL_Sabra(PL,entity):
 @st.cache_data
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
     st.write("before drop index",PL_with_detail)
-    PL_with_detai=PL_with_detail.reset_index(level=["Tenant_Account"], drop=False)
+    PL_with_detai=PL_with_detail.reset_index(drop=False)
     st.write("PL_with_detai drop index",PL_with_detail)
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
     diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","P&L Value","Diff","Sabra"])
