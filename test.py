@@ -654,7 +654,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
 
                     diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
 			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"Amount"})
-		    diff_detail_records["Month"]=timeid
+                    diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
                    
