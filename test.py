@@ -569,7 +569,9 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     #remove row above date row and remove column without date col name
     PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
 
-    #set tenant_account is index of PL
+    #set tenant_account as index of PL
+	
+    st.write(PL.iloc[:,tenantAccount_col_no])
     PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
     #remove rows with nan tenant account
     nan_index=list(filter(lambda x:x=="nan" or x=="" or x==" " or x!=x ,PL.index))
