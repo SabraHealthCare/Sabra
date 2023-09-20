@@ -159,7 +159,6 @@ def Identify_Tenant_Account_Col(PL,sheet_name):
         #If 20% of accounts match with account_mapping list, identify this col as tenant account.
         
         if len(match)>0 and sum(x for x in match)/len(match)>0.1:
-            st.write(tenantAccount_col_no)
             return tenantAccount_col_no  
         else:
             # it is wrong account column, continue search
@@ -600,7 +599,7 @@ def Mapping_PL_Sabra(PL,entity):
  
     PL=pd.concat([PL.merge(second_account_mapping,on="Tenant_Formated_Account",how='right'),PL.merge(main_account_mapping[main_account_mapping["Sabra_Account"]==main_account_mapping["Sabra_Account"]]\
                                             [["Sabra_Account","Tenant_Formated_Account","Tenant_Account","Conversion"]],on="Tenant_Formated_Account",how='right')])
-  
+    st.write(PL)
     PL=PL.reset_index(drop=True)
     month_cols=list(filter(lambda x:str(x[0:2])=="20",PL.columns))
     for i in range(len(PL.index)):
@@ -619,7 +618,7 @@ def Mapping_PL_Sabra(PL,entity):
                 elif conversion[0]=="*":
                     PL.loc[i,month]= before_conversion*float(conversion.split("*")[0])
     PL=PL.drop(["Tenant_Formated_Account","Conversion"], axis=1)
-    
+    st.write(PL)
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Property_Name"]=[property_name]*len(PL_with_detail.index)
     PL_with_detail["Entity"]=[entity]*len(PL_with_detail.index)
@@ -635,7 +634,7 @@ def Mapping_PL_Sabra(PL,entity):
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
     st.write(PL_with_detail)
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
-    diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","Amount","Diff","Sabra"])
+    diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","P&L Value","Diff","Sabra"])
     for entity in entity_mapping["ENTITY"]:
         for matrix in BPC_Account.loc[(BPC_Account["Category"]!="Balance Sheet")]["BPC_Account_Name"]: 
             for timeid in Total_PL.columns.sort_values()[-2:]: # only compare two months
@@ -657,14 +656,14 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     diff_BPC_PL=pd.concat([diff_BPC_PL,diff_single_record],ignore_index=True)
 
                     diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
-			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"Amount"})
+			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"P&L Value"})
                     diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
                     st.write(diff_detail_records)
                     #if there is no record in diff_detail_records, means there is no mapping
                     if diff_detail_records.shape[0]==0:
-                        diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"Amount":0},index=[0])
+                        diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"P&L Value":0},index=[0])
                         
                     diff_BPC_PL_detail=pd.concat([diff_BPC_PL_detail,diff_detail_records],ignore_index=True)
                
@@ -762,10 +761,8 @@ def View_Discrepancy_Detail():
                       .assign(Tenant_Account=" Total"),diff_BPC_PL_detail]).sort_values(by=["Entity","Sabra_Account","Month","Sabra","Diff"], kind='stable', ignore_index=True)[diff_BPC_PL_detail.columns])
         diff_BPC_PL_detail=diff_BPC_PL_detail.merge(BPC_Account[["BPC_Account_Name","Sabra_Account_Full_Name"]],left_on="Sabra_Account", right_on="BPC_Account_Name",how="left")
         diff_BPC_PL_detail=diff_BPC_PL_detail.merge(entity_mapping[["ENTITY","Property_Name"]],left_on="Entity", right_on="ENTITY",how="left")
-    
-        diff_BPC_PL_detail=diff_BPC_PL_detail[["Property_Name","Month","Sabra_Account_Full_Name","Tenant_Account","Sabra","Amount","Diff"]].\
-			rename(columns={"Property_Name":"Property","Sabra_Account_Full_Name":"Sabra Account","Amount":"P&L Value"})
-
+        diff_BPC_PL_detail=diff_BPC_PL_detail[["Property_Name","Month","Sabra_Account_Full_Name","Tenant_Account","Sabra","P&L Value","Diff"]].\
+			rename(columns={"Property_Name":"Property","Sabra_Account_Full_Name":"Sabra Account"})
         diff_BPC_PL_detail_for_download=diff_BPC_PL_detail.copy()
         for i in range(diff_BPC_PL_detail.shape[0]):
             if  diff_BPC_PL_detail.loc[i,"Tenant_Account"]!=" Total":
@@ -775,6 +772,7 @@ def View_Discrepancy_Detail():
                 diff_BPC_PL_detail.loc[i,"Sabra"]=""
                 diff_BPC_PL_detail.loc[i,"Diff"]=""
                 diff_BPC_PL_detail.loc[i,"Tenant_Account"]="—— "+diff_BPC_PL_detail.loc[i,"Tenant_Account"]
+        
         st.markdown(
             """
         <style type="text/css" media="screen">
