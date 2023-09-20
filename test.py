@@ -867,13 +867,15 @@ def Upload_Section(uploaded_file):
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
                     latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
-                    st.write(PL_with_detail)
-                    st.write(Total_PL)
+                    st.write("PL_with_detail",PL_with_detail)
+                    
                     Total_PL=Total_PL.combine_first(PL)
-                    st.write(Total_PL)
+                  
                     # remove rows with all None value
                     Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
+                    st.write("Total_PL_detail before",Total_PL)
                     Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
+                    st.write("Total_PL_detail after",Total_PL)
                     Total_PL_detail= Total_PL_detail.loc[(Total_PL_detail!= None).any(axis=1),:]
 		# check if balance sheet data existed   
 		
