@@ -660,6 +660,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     if diff_detail_records.shape[0]==0:
                         diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"P&L Value":0},index=[0])   
                     diff_BPC_PL_detail=pd.concat([diff_BPC_PL_detail,diff_detail_records])
+    st.write(diff_BPC_PL_detail)
     return diff_BPC_PL,diff_BPC_PL_detail
 
 @st.cache_data(experimental_allow_widgets=True)
