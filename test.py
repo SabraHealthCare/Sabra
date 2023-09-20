@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 from datetime import datetime, timedelta,date
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -567,13 +568,14 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         st.stop()     
     PL.columns=date_header[0]
     
-    #remove row above date row and remove column without date col name
-    PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
+   
 
     #set tenant_account as index of PL
-	
-    st.write(PL.iloc[:,tenantAccount_col_no])
     PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
+   
+    #remove row above date row and remove column without date col name
+    PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
+    
     #remove rows with nan tenant account
     nan_index=list(filter(lambda x:x=="nan" or x=="" or x==" " or x!=x ,PL.index))
     PL.drop(nan_index, inplace=True)
