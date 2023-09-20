@@ -929,7 +929,7 @@ if choice=="Upload P&L" and operator!='select operator':
         global latest_month
         latest_month="2023"
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
-
+        st.write("4Total_PL_detail",Total_PL_detail)
 	    
         # 1 Summary
         with st.expander("Summary of P&L" ,expanded=True):
