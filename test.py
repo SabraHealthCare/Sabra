@@ -653,7 +653,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     diff_BPC_PL=pd.concat([diff_BPC_PL,diff_single_record],ignore_index=True)
 
                     diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
-			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"Amount"})
+			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"P&L Value"})
                     diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
@@ -924,7 +924,7 @@ if choice=="Upload P&L" and operator!='select operator':
         global latest_month
         latest_month="2023"
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
-        st.write("1",diff_BPC_PL_detail)    
+
         # 1 Summary
         with st.expander("Summary of P&L" ,expanded=True):
             ChangeWidgetFontSize('Summary of P&L', '25px')
