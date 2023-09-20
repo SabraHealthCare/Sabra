@@ -858,35 +858,37 @@ def Upload_Section(uploaded_file):
                 sheet_name_occupancy=str(entity_mapping.loc[entity_i,"Sheet_Name_Occupancy"])
                 sheet_name_balance=str(entity_mapping.loc[entity_i,"Sheet_Name_Balance_Sheet"])
                 property_name=str(entity_mapping.loc[entity_i,"Property_Name"])
+		    
                 latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name")
 		
-                Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
-                Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
         
 		 # check if census data existed
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
-                    latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
+                    latest_month,PL_occ,PL_with_detail_occ=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
                     st.write("PL_with_detail",PL_with_detail)
                     
-                    Total_PL=Total_PL.combine_first(PL)
-                  
+                    PL=PL.combine_first(PL_occ)
                     # remove rows with all None value
-                    Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
-                    st.write("Total_PL_detail before",Total_PL)
-                    Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
-                    st.write("Total_PL_detail after",Total_PL)
-                    Total_PL_detail= Total_PL_detail.loc[(Total_PL_detail!= None).any(axis=1),:]
+                    #PL= PL.loc[(PL!= None).any(axis=1),:]
+                    st.write("PL before",PL)
+                    PL_with_detail=PL_with_detail.combine_first(PL_with_detail_occ)
+                    st.write("PL_with_detail after",PL_with_detail)
+                    #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
 		# check if balance sheet data existed   
 		
                 if sheet_name_balance!='nan' and sheet_name_balance==sheet_name_balance and sheet_name_balance!="" and sheet_name_balance!=" " and sheet_name_balance!=sheet_name:
-                        latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Balance_Sheet")
-                        Total_PL=Total_PL.combine_first(PL)
+                        latest_month,PL_BS,PL_with_detail_BS=PL_Process_Main(entity_i,"Sheet_Name_Balance_Sheet")
+                        PL=PL.combine_first(PL_BS)
                         # remove rows with all None value
-                        Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
-                    
-                        Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
-                        Total_PL_detail= Total_PL_detail.loc[(Total_PL_detail!= None).any(axis=1),:]
+                        #PL= PL.loc[(PL!= None).any(axis=1),:]
+                
+                        PL_with_detail=PL_with_detail.combine_first(PL_with_detail_BS)
+                     
+                        #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
+                
+		Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
+                Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
                 st.success("Property {} checked.".format(entity_mapping.loc[entity_i,"Property_Name"]))
             
             
