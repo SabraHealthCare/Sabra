@@ -156,7 +156,7 @@ def Identify_Tenant_Account_Col(PL,sheet_name,sheet_type):
         account_pool=account_pool.loc[account_pool["Category"]=="Patient Days"]["Tenant_Formated_Account"]	       
     elif sheet_type=="Sheet_Name_Balance_Sheet":
         account_pool=account_pool.loc[account_pool["Category"]=="Balance Sheet"]["Tenant_Formated_Account"]
-    st.write(account_pool)
+    
     for tenantAccount_col_no in range(0,PL.shape[1]):
         #trim and upper case 
         candidate_col=list(map(lambda x: str(x).strip().upper() if x==x else x,PL.iloc[:,tenantAccount_col_no]))
