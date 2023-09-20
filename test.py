@@ -628,7 +628,6 @@ def Mapping_PL_Sabra(PL,entity):
     # aggregate by Sabra_Account
     PL=PL.groupby(by=PL.index).sum().replace(0,None)
     PL.index=[[entity]*len(PL.index),list(PL.index)]
-    st.write("1",PL_with_detail)
     return PL,PL_with_detail
     
 @st.cache_data
@@ -840,7 +839,6 @@ def PL_Process_Main(entity_i,sheet_type):
                 st.error("The latest month in sheet '{}' is not {}. Please fix it and re-upload.".format(sheet_name,latest_month))
                 st.stop()
 	    # check the start reporting month
-    st.write("2",PL_with_detail)
     return latest_month,PL,PL_with_detail
 
 @st.cache_data(experimental_allow_widgets=True)  
@@ -868,8 +866,11 @@ def Upload_Section(uploaded_file):
 		 # check if census data existed
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
-                    latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy")  
+                    latest_month,PL,PL_with_detail=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
+                    st.write(PL_with_detail)
+                    st.write(Total_PL)
                     Total_PL=Total_PL.combine_first(PL)
+                    st.write(Total_PL)
                     # remove rows with all None value
                     Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
                     Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
@@ -929,7 +930,6 @@ if choice=="Upload P&L" and operator!='select operator':
         global latest_month
         latest_month="2023"
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
-        st.write("4Total_PL_detail",Total_PL_detail)
 	    
         # 1 Summary
         with st.expander("Summary of P&L" ,expanded=True):
