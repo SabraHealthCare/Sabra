@@ -567,8 +567,6 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         st.error("Fail to identify month/year header in sheet '{}', please add it and re-upload.".format(sheet_name))
         st.stop()     
     PL.columns=date_header[0]
-    
-   
 
     #set tenant_account as index of PL
     PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
@@ -581,15 +579,11 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     PL.drop(nan_index, inplace=True)
     #set index as str ,strip
     PL.index=map(lambda x:str(x).strip(),PL.index)
-    if sheet_name=="Stats":
-        st.write("2",PL)
     PL=PL.applymap(lambda x: 0 if (x!=x) or (type(x)==str) or x==" " else x)
     # remove columns with all nan/0
     PL=PL.loc[:,(PL!= 0).any(axis=0)]
     # remove rows with all nan/0 value
     PL=PL.loc[(PL!= 0).any(axis=1),:]
-    if sheet_name=="Stats":
-        st.write("5",PL)
     return PL
 
 @st.cache_data
