@@ -3,7 +3,7 @@ import numpy as np
 from datetime import datetime, timedelta,date
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
-import streamlit as st
+import streamlit as st                
 import boto3
 from io import BytesIO
 from tempfile import NamedTemporaryFile
@@ -147,23 +147,28 @@ def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
     components.html(f"{htmlstr}", height=0, width=0)
 
 @st.cache_data
-def Identify_Tenant_Account_Col(PL,sheet_name):
+def Identify_Tenant_Account_Col(PL,sheet_name,sheet_type):
     #search tenant account column in P&L, return col number of tenant account
+    account_pool=account_mapping[["Sabra_Account","Tenant_Formated_Account"]].merge(BPC_Account[["BPC_Account_Name","Category"]], left_on="Sabra_Account", right_on="BPC_Account_Name",how="left")	       
+    if sheet_type=="Sheet_Name_Occupancy": 
+	account_pool=account_pool.loc[account_pool["Category"]=="Patient Days"]["Tenant_Formated_Account"]	       
+    elif sheet_type=="Sheet_Name_Balance_Sheet":
+        account_pool=account_pool.loc[account_pool["Category"]=="Balance Sheet"]["Tenant_Formated_Account"]
+    st.write(account_pool)
     for tenantAccount_col_no in range(0,PL.shape[1]):
         #trim and upper case 
-        account_column=list(map(lambda x: str(x).strip().upper() if x==x else x,PL.iloc[:,tenantAccount_col_no]))
-        #find out how many tenant accounts match with account_mapping list
-        match=[x in account_column for x in account_mapping["Tenant_Formated_Account"]]
-        #If 20% of accounts match with account_mapping list, identify this col as tenant account.
+        candidate_col=list(map(lambda x: str(x).strip().upper() if x==x else x,PL.iloc[:,tenantAccount_col_no]))
+        #find out how many tenant accounts match with account_pool
+        match=[x in candidate_col for x in account_pool]
+        #If 10% of accounts match with account_mapping list, identify this col as tenant account.
         
         if len(match)>0 and sum(x for x in match)/len(match)>0.1:
             return tenantAccount_col_no  
         else:
-            # it is wrong account column, continue search
+            # it is the wrong account column, continue to check next column
             continue
             
-    # didn't find accounts col
-    st.error("Can't identify accounts column in sheet—— '"+sheet_name+"'")
+    st.error("Fail to identify tenant accounts column in sheet—— '"+sheet_name+"'")
     st.stop()
 
 
@@ -554,7 +559,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     
     # Start checking process
     st.write("********Start to check property—'"+property_name+"' in sheet '"+sheet_name+"'********" )  
-    tenantAccount_col_no=Identify_Tenant_Account_Col(PL,sheet_name)
+    tenantAccount_col_no=Identify_Tenant_Account_Col(PL,sheet_name,sheet_type)
     if tenantAccount_col_no==None:
         st.error("Fail to identify tenant account column in sheet '{}'".format(sheet_name))
         st.stop()    
@@ -878,7 +883,7 @@ def Upload_Section(uploaded_file):
                 Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
                 Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
                 st.success("Property {} checked.".format(entity_mapping.loc[entity_i,"Property_Name"]))
-                st.write(Total_PL,Total_PL_detail)
+
             # if Sheet_Name_Occupancy is available, process occupancy data separately
 	    # check if census data existed
 		
