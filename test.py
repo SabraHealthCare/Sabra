@@ -633,11 +633,12 @@ def Mapping_PL_Sabra(PL,entity):
     
 @st.cache_data
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
+    st.write(PL_with_detail)
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
     diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","Amount","Diff","Sabra"])
     for entity in entity_mapping["ENTITY"]:
         for matrix in BPC_Account.loc[(BPC_Account["Category"]!="Balance Sheet")]["BPC_Account_Name"]: 
-            for timeid in Total_PL.columns.sort_values()[-2:]:
+            for timeid in Total_PL.columns.sort_values()[-2:]: # only compare two months
                 try:
                     BPC_value=int(BPC_pull.loc[entity,matrix][timeid+'00'])
                 except:
@@ -654,6 +655,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                                                      "P&L":PL_value,"Diff":diff},index=[0])
                     
                     diff_BPC_PL=pd.concat([diff_BPC_PL,diff_single_record],ignore_index=True)
+
                     diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
 			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"Amount"})
                     diff_detail_records["Month"]=timeid
