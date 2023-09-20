@@ -517,10 +517,9 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     # read data from uploaded file
     count=0
     while(True):
-	    
         try:
             PL = pd.read_excel(uploaded_file,sheet_name=sheet_name,header=None)
-            st.write(PL)
+            st.write("before",PL)
             break
         except:
 	    # if there is no sheet name for sold property in P&L, continue to process next property
@@ -585,7 +584,7 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     PL=PL.loc[:,(PL!= 0).any(axis=0)]
     # remove rows with all nan/0 value
     PL=PL.loc[(PL!= 0).any(axis=1),:]
-    st.write(PL)
+    st.write("after process",PL)
     return PL
 
 @st.cache_data
