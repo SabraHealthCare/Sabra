@@ -866,12 +866,13 @@ def Upload_Section(uploaded_file):
                 if sheet_name_occupancy!='nan' and sheet_name_occupancy==sheet_name_occupancy and sheet_name_occupancy!="" and sheet_name_occupancy!=" "\
                     and sheet_name_occupancy!=sheet_name:
                     latest_month,PL_occ,PL_with_detail_occ=PL_Process_Main(entity_i,"Sheet_Name_Occupancy") 
-                    st.write("PL_with_detail",PL_with_detail)
+                    st.write("PL_with_detail before",PL_with_detail)                    
+                    st.write("PL_with_detail_occ before",PL_with_detail_occ)
                     
                     PL=PL.combine_first(PL_occ)
                     # remove rows with all None value
                     #PL= PL.loc[(PL!= None).any(axis=1),:]
-                    st.write("PL before",PL)
+        
                     PL_with_detail=PL_with_detail.combine_first(PL_with_detail_occ)
                     st.write("PL_with_detail after",PL_with_detail)
                     #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
