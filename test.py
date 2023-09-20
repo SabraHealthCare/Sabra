@@ -655,13 +655,11 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
-                    st.write(diff_detail_records)
+                   
                     #if there is no record in diff_detail_records, means there is no mapping
                     if diff_detail_records.shape[0]==0:
-                        diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"P&L Value":0},index=[0])
-                        
-                    diff_BPC_PL_detail=pd.concat([diff_BPC_PL_detail,diff_detail_records],ignore_index=True)
-               
+                        diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"P&L Value":0},index=[0])   
+                    diff_BPC_PL_detail=pd.concat([diff_BPC_PL_detail,diff_detail_records])
     return diff_BPC_PL,diff_BPC_PL_detail
 
 @st.cache_data(experimental_allow_widgets=True)
@@ -750,7 +748,6 @@ def View_Discrepancy_Detail():
     def color_coding(row):
     	return ['color: blue'] * len(row) if row.Tenant_Account == " Total" else ['color: black'] * len(row)
     if diff_BPC_PL.shape[0]>0:
-        st.write(diff_BPC_PL_detail)
         st.markdown("---")
         st.markdown("P&L—Sabra detail accounts mapping (for discrepancy data)") 
         diff_BPC_PL_detail = (pd.concat([diff_BPC_PL_detail.groupby(["Entity","Sabra_Account","Month","Sabra","Diff"], as_index=False).sum()
@@ -924,7 +921,7 @@ if choice=="Upload P&L" and operator!='select operator':
         global latest_month
         latest_month="2023"
         Total_PL,Total_PL_detail,diff_BPC_PL,diff_BPC_PL_detail,percent_discrepancy_accounts=Upload_Section(uploaded_file)
-	    
+        st.write("1",diff_BPC_PL_detail)    
         # 1 Summary
         with st.expander("Summary of P&L" ,expanded=True):
             ChangeWidgetFontSize('Summary of P&L', '25px')
