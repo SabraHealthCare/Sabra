@@ -567,10 +567,10 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     PL.columns=date_header[0]
     #set tenant_account is index of PL, only keep rows with accounts and columns with valid month
     if sheet_name=="Stats":
-        st.write("before index",PL[list(map(lambda x:x!="0",PL.columns))])
+        st.write("before index",PL[list(filter(lambda x:x!="0",PL.columns))])
     PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
     if sheet_name=="Stats":
-        st.write("before index",PL[list(map(lambda x:x!="0",PL.columns))])
+        st.write("before index",PL[list(filter(lambda x:x!="0",PL.columns))])
     #remove row above date row and remove column without date col name
     PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
     
