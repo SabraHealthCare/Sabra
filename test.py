@@ -599,7 +599,7 @@ def Mapping_PL_Sabra(PL,entity):
  
     PL=pd.concat([PL.merge(second_account_mapping,on="Tenant_Formated_Account",how='right'),PL.merge(main_account_mapping[main_account_mapping["Sabra_Account"]==main_account_mapping["Sabra_Account"]]\
                                             [["Sabra_Account","Tenant_Formated_Account","Tenant_Account","Conversion"]],on="Tenant_Formated_Account",how='right')])
-    st.write(PL)
+
     PL=PL.reset_index(drop=True)
     month_cols=list(filter(lambda x:str(x[0:2])=="20",PL.columns))
     for i in range(len(PL.index)):
@@ -618,7 +618,7 @@ def Mapping_PL_Sabra(PL,entity):
                 elif conversion[0]=="*":
                     PL.loc[i,month]= before_conversion*float(conversion.split("*")[0])
     PL=PL.drop(["Tenant_Formated_Account","Conversion"], axis=1)
-    st.write(PL)
+
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Property_Name"]=[property_name]*len(PL_with_detail.index)
     PL_with_detail["Entity"]=[entity]*len(PL_with_detail.index)
@@ -628,6 +628,7 @@ def Mapping_PL_Sabra(PL,entity):
     # aggregate by Sabra_Account
     PL=PL.groupby(by=PL.index).sum().replace(0,None)
     PL.index=[[entity]*len(PL.index),list(PL.index)]
+    st.write("1",PL_with_detail)
     return PL,PL_with_detail
     
 @st.cache_data
@@ -839,6 +840,7 @@ def PL_Process_Main(entity_i,sheet_type):
                 st.error("The latest month in sheet '{}' is not {}. Please fix it and re-upload.".format(sheet_name,latest_month))
                 st.stop()
 	    # check the start reporting month
+    st.write("2",PL_with_detail)
     return latest_month,PL,PL_with_detail
 
 @st.cache_data(experimental_allow_widgets=True)  
@@ -872,7 +874,7 @@ def Upload_Section(uploaded_file):
                     Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
                     Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
                     Total_PL_detail= Total_PL_detail.loc[(Total_PL_detail!= None).any(axis=1),:]
-		
+                    st.write("3",PL_with_detail)
 		# check if balance sheet data existed   
 		
                 if sheet_name_balance!='nan' and sheet_name_balance==sheet_name_balance and sheet_name_balance!="" and sheet_name_balance!=" " and sheet_name_balance!=sheet_name:
