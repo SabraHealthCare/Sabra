@@ -519,7 +519,6 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     while(True):
         try:
             PL = pd.read_excel(uploaded_file,sheet_name=sheet_name,header=None)
-            st.write("before",PL)
             break
         except:
 	    # if there is no sheet name for sold property in P&L, continue to process next property
@@ -556,7 +555,6 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
     
     # Start checking process
     st.write("********Start to check property—'"+property_name+"' in sheet '"+sheet_name+"'********" )  
-	    
     tenantAccount_col_no=Identify_Tenant_Account_Col(PL,sheet_name)
     if tenantAccount_col_no==None:
         st.error("Fail to identify tenant account column in sheet '{}'".format(sheet_name))
@@ -568,7 +566,11 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         st.stop()     
     PL.columns=date_header[0]
     #set tenant_account is index of PL, only keep rows with accounts and columns with valid month
+    if sheet_name=="Stats":
+        st.write("before index",PL)
     PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
+    if sheet_name=="Stats":
+        st.write("after index",PL)
     #remove row above date row and remove column without date col name
     PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
     
