@@ -619,7 +619,6 @@ def Mapping_PL_Sabra(PL,entity):
     PL_with_detail=copy.copy(PL)
     PL_with_detail["Entity"]=entity
     PL_with_detail=PL_with_detail.set_index(['Entity', 'Sabra_Account',"Tenant_Account"])
-    st.write(PL_with_detail)
     PL=PL.set_index("Sabra_Account",drop=True)
     PL=PL.drop(["Tenant_Account"], axis=1)
     # group by Sabra_Account
