@@ -565,30 +565,22 @@ def Sheet_Process(entity_i,sheet_type,sheet_name):
         st.error("Fail to identify month/year header in sheet '{}', please add it and re-upload.".format(sheet_name))
         st.stop()     
     PL.columns=date_header[0]
-    #set tenant_account is index of PL, only keep rows with accounts and columns with valid month
     
-    PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
-    if sheet_name=="Stats":
-        st.write("after index",PL[list(filter(lambda x:x!="0",PL.columns))])
     #remove row above date row and remove column without date col name
     PL=PL.iloc[date_header[1]+1:,PL.columns!='0']
-    
+
+    #set tenant_account is index of PL
+    PL=PL.set_index(PL.iloc[:,tenantAccount_col_no].values)
+    #remove rows with nan tenant account
+    nan_index=list(filter(lambda x:x=="nan" or x=="" or x==" " or x!=x ,PL.index))
+    PL.drop(nan_index, inplace=True)
     #set index as str ,strip
     PL.index=map(lambda x:str(x).strip(),PL.index)
-    if sheet_name=="Stats":
-        st.write("1",PL)    
-    
-    #remove rows with nan tenant account
-    PL=PL.loc[list(filter(lambda x:x!="nan" and x!="" and x!=" " and not (x!=x) ,PL.index))]
     if sheet_name=="Stats":
         st.write("2",PL)
     PL=PL.applymap(lambda x: 0 if (x!=x) or (type(x)==str) or x==" " else x)
     # remove columns with all nan/0
-    if sheet_name=="Stats":
-        st.write("3",PL)
     PL=PL.loc[:,(PL!= 0).any(axis=0)]
-    if sheet_name=="Stats":
-        st.write("4",PL)
     # remove rows with all nan/0 value
     PL=PL.loc[(PL!= 0).any(axis=1),:]
     if sheet_name=="Stats":
