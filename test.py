@@ -875,7 +875,6 @@ def Upload_Section(uploaded_file):
                     Total_PL= Total_PL.loc[(Total_PL!= None).any(axis=1),:]
                     Total_PL_detail=Total_PL_detail.combine_first(PL_with_detail)
                     Total_PL_detail= Total_PL_detail.loc[(Total_PL_detail!= None).any(axis=1),:]
-                    st.write("3Total_PL_detail",Total_PL_detail)
 		# check if balance sheet data existed   
 		
                 if sheet_name_balance!='nan' and sheet_name_balance==sheet_name_balance and sheet_name_balance!="" and sheet_name_balance!=" " and sheet_name_balance!=sheet_name:
