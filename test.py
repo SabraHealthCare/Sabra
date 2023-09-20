@@ -874,11 +874,11 @@ def Upload_Section(uploaded_file):
                         PL_with_detail=PL_with_detail.combine_first(PL_with_detail_BS)
                         #PL_with_detail= PL_with_detail.loc[(PL_with_detail!= None).any(axis=1),:]
                 
-                st.write(Total_PL,Total_PL_detail)
+                
                 Total_PL=pd.concat([Total_PL,PL], ignore_index=False, sort=False)
                 Total_PL_detail=pd.concat([Total_PL_detail,PL_with_detail], ignore_index=False, sort=False)
                 st.success("Property {} checked.".format(entity_mapping.loc[entity_i,"Property_Name"]))
-            
+                st.write(Total_PL,Total_PL_detail)
             # if Sheet_Name_Occupancy is available, process occupancy data separately
 	    # check if census data existed
 		
