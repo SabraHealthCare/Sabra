@@ -1,10 +1,8 @@
 import pandas as pd
 import numpy as np
-
 from datetime import datetime, timedelta,date
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
-
 import streamlit as st
 import boto3
 from io import BytesIO
@@ -631,9 +629,7 @@ def Mapping_PL_Sabra(PL,entity):
     
 @st.cache_data
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
-    st.write("before drop index",PL_with_detail)
     PL_with_detail=PL_with_detail.reset_index(level="Tenant_Account",drop=False)
-    st.write("PL_with_detai drop index",PL_with_detail)
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
     diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","P&L Value","Diff","Sabra"])
     for entity in entity_mapping["ENTITY"]:
@@ -754,6 +750,7 @@ def View_Discrepancy_Detail():
     def color_coding(row):
     	return ['color: blue'] * len(row) if row.Tenant_Account == " Total" else ['color: black'] * len(row)
     if diff_BPC_PL.shape[0]>0:
+        st.write(diff_BPC_PL_detail)
         st.markdown("---")
         st.markdown("P&L—Sabra detail accounts mapping (for discrepancy data)") 
         diff_BPC_PL_detail = (pd.concat([diff_BPC_PL_detail.groupby(["Entity","Sabra_Account","Month","Sabra","Diff"], as_index=False).sum()
