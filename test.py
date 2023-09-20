@@ -924,8 +924,6 @@ if choice=="Upload P&L" and operator!='select operator':
                     st.write("{} uploaded.".format(uploaded_file.name))
      
     if uploaded_file:
-        test = pd.read_excel(uploaded_file,header=None)
-        st.write(test)
 	# initial parameter
         TENANT_ID=format_table["Tenant_ID"][0]
         global latest_month
