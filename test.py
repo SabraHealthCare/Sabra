@@ -629,7 +629,7 @@ def Mapping_PL_Sabra(PL,entity):
     
 @st.cache_data
 def Compare_PL_Sabra(Total_PL,PL_with_detail):
-    PL_with_detail=PL_with_detail.reset_index(level="Tenant_Account",drop=False)
+    PL_with_detail=PL_with_detail.reset_index(drop=False)
     diff_BPC_PL=pd.DataFrame(columns=["TIME","ENTITY","Sabra_Account","Sabra","P&L","Diff"])
     diff_BPC_PL_detail=pd.DataFrame(columns=["Entity","Sabra_Account","Tenant_Account","Month","P&L Value","Diff","Sabra"])
     for entity in entity_mapping["ENTITY"]:
@@ -651,8 +651,10 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                                                      "P&L":PL_value,"Diff":diff},index=[0])
                     
                     diff_BPC_PL=pd.concat([diff_BPC_PL,diff_single_record],ignore_index=True)
-                    diff_detail_records=PL_with_detail.loc[(entity,matrix)][["Tenant_Account",timeid]].rename(columns={timeid:"P&L Value"})
-                    diff_detail_records["Month"]=timeid
+
+                    diff_detail_records=PL_with_detail.loc[(PL_with_detail["Sabra_Account"]==matrix)&(PL_with_detail["Entity"]==entity)]\
+			                [["Entity","Sabra_Account","Tenant_Account",timeid]].rename(columns={timeid:"Amount"})
+		    diff_detail_records["Month"]=timeid
                     diff_detail_records["Sabra"]=BPC_value
                     diff_detail_records["Diff"]=diff
                    
@@ -660,7 +662,7 @@ def Compare_PL_Sabra(Total_PL,PL_with_detail):
                     if diff_detail_records.shape[0]==0:
                         diff_detail_records=pd.DataFrame({"Entity":entity,"Sabra_Account":matrix,"Tenant_Account":"Miss mapping accounts","Month":timeid,"Sabra":BPC_value,"Diff":diff,"P&L Value":0},index=[0])   
                     diff_BPC_PL_detail=pd.concat([diff_BPC_PL_detail,diff_detail_records])
-    st.write(diff_BPC_PL_detail)
+
     return diff_BPC_PL,diff_BPC_PL_detail
 
 @st.cache_data(experimental_allow_widgets=True)
