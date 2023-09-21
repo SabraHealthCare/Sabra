@@ -349,7 +349,7 @@ def Identify_Month_Row(PL,tenantAccount_col_no,sheet_name):
                     # all the year rows are not valid, add year to month
                     else:
                         continue
-                
+
 		# all the year rows are not valid, add year to month
                 year_table.iloc[year_sort_index[year_index_i],]=Add_year_to_header(list(month_table.iloc[month_sort_index[month_index_i],]))
                 PL_date_header=year_table.iloc[year_sort_index[year_index_i],].apply(lambda x:str(int(x)))+\
