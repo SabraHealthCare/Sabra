@@ -1,4 +1,4 @@
-jwt
+PyJWT
 bcrypt
 extra_streamlit_components
 streamlit_authenticator
