@@ -2,5 +2,7 @@
 streamlit_authenticator==0.1.5
 streamlit==1.12.0
 pandas==1.4.3
+mysqlclient
+SQLAlchemy
 
 
