@@ -2,3 +2,4 @@ streamlit_authenticator
 streamlit
 pandas
 pymysql
+SQLAlchemy==8.0.42
