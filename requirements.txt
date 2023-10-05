@@ -1,5 +1,6 @@
-mysqlclient==8.0.34
-SQLAlchemy==8.0.34
+mysqlclient
+SQLAlchemy
+#==8.0.34
 streamlit_authenticator==0.1.5
 streamlit==1.12.0
 openpyxl==3.0.10
