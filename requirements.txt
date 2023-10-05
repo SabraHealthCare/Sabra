@@ -1,4 +1,4 @@
 streamlit_authenticator
 streamlit
 pandas
-mysqlclient
+mysqlclient==8.0.34
