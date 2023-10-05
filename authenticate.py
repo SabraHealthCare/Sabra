@@ -1,12 +1,12 @@
 #import jwt
 import bcrypt
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta.
 import extra_streamlit_components as stx
 
-from hasher import Hasher
-from validator import Validator
-from utils import generate_random_pw
+from .hasher import Hasher
+from .validator import Validator
+from .utils import generate_random_pw
 
 from exceptions import CredentialsError, ForgotError, RegisterError, ResetError, UpdateError
 
