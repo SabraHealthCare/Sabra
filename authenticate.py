@@ -26,13 +26,14 @@ for uname,name,pwd in zip(usernames,names,passwords):
 st.write(credentials)        
 authenticator = stauth.Authenticate(credentials, "cokkie_name", "random_key", cookie_expiry_days=30)
 name, authentication_status, username = authenticator.login("Login", "main")
-st.write(name, authentication_status, username)
+
 if authentication_status == False:
     st.error("Username/password is incorrect")
+    st.write(name, authentication_status, username)
 
 if authentication_status == None:
     st.warning("Please enter your username and password")
-
+    st.write(name, authentication_status, username)
 if authentication_status:
     placeholder.empty()
     st.write("got")
