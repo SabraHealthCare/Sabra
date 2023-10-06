@@ -1,18 +1,4 @@
-import os
 
-from deta import Deta  # pip install deta
-from dotenv import load_dotenv  # pip install python-dotenv
-
-
-# Load the environment variables
-load_dotenv(".env")
-DETA_KEY = os.getenv("DETA_KEY")
-
-# Initialize with a project key
-deta = Deta(DETA_KEY)
-
-# This is how to create/connect a database
-db = deta.Base("users_db")
 
 
 def insert_user(username, name, password):
