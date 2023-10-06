@@ -1,15 +1,15 @@
 import pickle
 from pathlib import Path
 import pandas as pd  
-#import plotly.express as px  
 import streamlit as st  
 
 import streamlit_authenticator as stauth
 
 # --- USER AUTHENTICATION ---
-names = ["Peter Parker", "Rebecca Miller"]
+
 usernames = ["pparker", "rmiller"]
-passwords = ["123","123"]
+names = ["Peter Parker", "Rebecca Miller"]
+passwords = ["abc123", "def456"]
 
 
 # load hashed passwords
@@ -19,7 +19,6 @@ with file_path.open("rb") as file:
 
 credentials = {"usernames":{}}
 
-
 hashed_passwords = stauth.Hasher(passwords).generate()
 for uname,name,pwd in zip(usernames,names,passwords):
     user_dict = {"name": name, "password": pwd}
@@ -27,7 +26,7 @@ for uname,name,pwd in zip(usernames,names,passwords):
         
 authenticator = stauth.Authenticate(credentials, "cokkie_name", "random_key", cookie_expiry_days=30)
 name, authentication_status, username = authenticator.login("Login", "main")
-
+st.write(name, authentication_status, username)
 if authentication_status == False:
     st.error("Username/password is incorrect")
 
