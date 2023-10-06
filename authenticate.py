@@ -23,7 +23,7 @@ hashed_passwords = stauth.Hasher(passwords).generate()
 for uname,name,pwd in zip(usernames,names,passwords):
     user_dict = {"name": name, "password": pwd}
     credentials["usernames"].update({uname: user_dict})
-        
+st.write(credentials)        
 authenticator = stauth.Authenticate(credentials, "cokkie_name", "random_key", cookie_expiry_days=30)
 name, authentication_status, username = authenticator.login("Login", "main")
 st.write(name, authentication_status, username)
