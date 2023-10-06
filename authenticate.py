@@ -4,15 +4,13 @@ import pandas as pd
 #import plotly.express as px  # pip install plotly-express
 import streamlit as st  
 
-import streamlit_authenticator as stauth 
-
-
-
-
+import streamlit_authenticator as stauth
 
 # --- USER AUTHENTICATION ---
 names = ["Peter Parker", "Rebecca Miller"]
 usernames = ["pparker", "rmiller"]
+passwords = ["123","123"]
+
 
 # load hashed passwords
 file_path = Path(__file__).parent / "hashed_pw.pkl"
