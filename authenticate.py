@@ -18,7 +18,9 @@ with file_path.open("rb") as file:
     hashed_passwords = pickle.load(file)
 
 credentials = {"usernames":{}}
-        
+
+
+hashed_passwords = stauth.Hasher(passwords).generate()
 for uname,name,pwd in zip(usernames,names,passwords):
     user_dict = {"name": name, "password": pwd}
     credentials["usernames"].update({uname: user_dict})
@@ -33,10 +35,8 @@ if authentication_status == None:
     st.warning("Please enter your username and password")
 
 if authentication_status:
+    placeholder.empty()
     st.write("got")
-    # ---- READ EXCEL ----
-    @st.cache
-   
 
    
     # ---- SIDEBAR ----
