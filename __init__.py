@@ -11,8 +11,8 @@ from  hasher import Hasher
 from  authenticate import Authenticate
 
 _RELEASE = True
-
-if not _RELEASE:
+st.write(1)
+if _RELEASE:
     # hashed_passwords = Hasher(['abc', 'def']).generate()
 
     # Loading config file
