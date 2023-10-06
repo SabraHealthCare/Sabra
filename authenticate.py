@@ -1,25 +1,26 @@
-import pickle
-from pathlib import Path
-
+#import pickle
+#from pathlib import Path
+st.write(1)
 import pandas as pd  # pip install pandas openpyxl
 import plotly.express as px  # pip install plotly-express
 import streamlit as st  # pip install streamlit
 import streamlit_authenticator as stauth  # pip install streamlit-authenticator
+st.write(2)
 
 
 # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 st.set_page_config(page_title="Sales Dashboard", page_icon=":bar_chart:", layout="wide")
 
-
+st.write(3)
 # --- USER AUTHENTICATION ---
 names = ["Peter Parker", "Rebecca Miller"]
 usernames = ["pparker", "rmiller"]
-
+st.write(4)
 # load hashed passwords
 file_path = Path(__file__).parent / "hashed_pw.pkl"
 with file_path.open("rb") as file:
     hashed_passwords = pickle.load(file)
-
+st.write(5)
 authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
     "sales_dashboard", "abcdef", cookie_expiry_days=30)
 
