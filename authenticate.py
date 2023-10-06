@@ -1,31 +1,35 @@
-import pickle
-from pathlib import Path
-import pandas as pd  
-import streamlit as st  
+import pandas as pd  # pip install pandas openpyxl
+import plotly.express as px  # pip install plotly-express
+import streamlit as st  # pip install streamlit
+import streamlit_authenticator as stauth  # pip install streamlit-authenticator
 
-import streamlit_authenticator as stauth
+import database as db
+
+
+# emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
+st.set_page_config(page_title="Sales Dashboard", page_icon=":bar_chart:", layout="wide")
+
+# --- DEMO PURPOSE ONLY --- #
+placeholder = st.empty()
+placeholder.info("CREDENTIALS | username:pparker ; password:abc123")
+# ------------------------- #
 
 # --- USER AUTHENTICATION ---
+users = db.fetch_all_users()
 
-usernames = ["pparker", "rmiller"]
-names = ["Peter Parker", "Rebecca Miller"]
-passwords = ["abc123", "def456"]
+usernames = [user["key"] for user in users]
+names = [user["name"] for user in users]
+hashed_passwords = [user["password"] for user in users]
 
-
-# load hashed passwords
-file_path = Path(__file__).parent / "hashed_pw.pkl"
-with file_path.open("rb") as file:
-    hashed_passwords = pickle.load(file)
-
-credentials = {"usernames":{}}
-
-hashed_passwords = stauth.Hasher(passwords).generate()
-for uname,name,pwd in zip(usernames,names,passwords):
-    user_dict = {"name": name, "password": pwd}
-    credentials["usernames"].update({uname: user_dict})
-st.write(credentials)        
 authenticator = stauth.Authenticate(credentials, "cokkie_name", "random_key", cookie_expiry_days=30)
 name, authentication_status, username = authenticator.login("Login", "main")
+
+if authentication_status == False:
+    st.error("Username/password is incorrect")
+
+if authentication_status == None:
+    st.warning("Please enter your username and password")
+      
 
 if authentication_status == False:
     st.error("Username/password is incorrect")
