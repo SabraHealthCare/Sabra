@@ -5,17 +5,29 @@ import pandas as pd
 import streamlit as st  
 
 import streamlit_authenticator as stauth 
- 
+usernames = ['user1','user2']
+names = ['name1','name2']
+passwords = ['pwd1','pwd2']
+
+credentials = {"usernames":{}}
+        
+for uname,name,pwd in zip(usernames,names,passwords):
+    user_dict = {"name": name, "password": pwd}
+    credentials["usernames"].update({uname: user_dict})
+        
+authenticator = stauth.Authenticate(credentials, "cokkie_name", "random_key", cookie_expiry_days=30)
+
+
 # --- USER AUTHENTICATION ---
 names = ["Peter Parker", "Rebecca Miller"]
 usernames = ["pparker", "rmiller"]
-st.write(4)
+
 # load hashed passwords
 file_path = Path(__file__).parent / "hashed_pw.pkl"
 with file_path.open("rb") as file:
     hashed_passwords = pickle.load(file)
-st.write(5)
-authenticator = stauth.Authenticate(names, usernames, hashed_passwords,"sales_dashboard", "abcdef", cookie_expiry_days=30)
+
+authenticator = stauth.Authenticate(credentials, "app_home", "auth", cookie_expiry_days=30))
 
 name, authentication_status, username = authenticator.login("Login", "main")
 
