@@ -1,5 +1,5 @@
 streamlit_authenticator
 streamlit
 pandas
-pymysql
-SQLAlchemy
+pickle
+pathlib
