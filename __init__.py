@@ -11,13 +11,14 @@ from  hasher import Hasher
 from  authenticate import Authenticate
 
 _RELEASE = True
-st.write(1)
+
 if _RELEASE:
     # hashed_passwords = Hasher(['abc', 'def']).generate()
 
     # Loading config file
     with open('config.yaml') as file:
         config = yaml.load(file, Loader=SafeLoader)
+        st.write(config)
 
     # Creating the authenticator object
     authenticator = Authenticate(
@@ -33,7 +34,7 @@ if _RELEASE:
     if st.session_state["authentication_status"]:
         authenticator.logout('Logout', 'main')
         st.write(f'Welcome *{st.session_state["name"]}*')
-        st.title('Some content')
+        st.title('Some content_______')
     elif st.session_state["authentication_status"] is False:
         st.error('Username/password is incorrect')
     elif st.session_state["authentication_status"] is None:
@@ -85,7 +86,7 @@ if _RELEASE:
             st.error(e)
 
     # Saving config file
-    with open('../config.yaml', 'w') as file:
+    with open('config.yaml', 'w') as file:
         yaml.dump(config, file, default_flow_style=False)
 
 
