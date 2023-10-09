@@ -1,3 +1,5 @@
+
+
 import pandas as pd  # pip install pandas openpyxl
 import streamlit as st  # pip install streamlit
 import streamlit_authenticator as stauth  # pip install streamlit-authenticator
@@ -89,6 +91,8 @@ if _RELEASE:
     # Saving config file
     with open('../config.yaml', 'w') as file:
         yaml.dump(config, file, default_flow_style=False)
-        st.write(config)
+    with open('../config.yaml') as file:
+        config1 = yaml.load(file, Loader=SafeLoader)
+        st.write(config1)
 
 
