@@ -15,7 +15,7 @@ _RELEASE = True
 if _RELEASE:
 
     # Loading config file
-    with open('config.yaml') as file:
+    with open('../config.yaml') as file:
         config = yaml.load(file, Loader=SafeLoader)
         st.write(config)
 
@@ -87,7 +87,7 @@ if _RELEASE:
             st.error(e)
 
     # Saving config file
-    with open('config.yaml', 'w') as file:
+    with open('../config.yaml', 'w') as file:
         yaml.dump(config, file, default_flow_style=False)
         st.write(config)
 
