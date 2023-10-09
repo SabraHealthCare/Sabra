@@ -88,7 +88,7 @@ if _RELEASE:
 
     # Saving config file
     with open('config.yaml', 'w') as file:
-        yaml.dump(config, file, default_flow_style=True)
+        yaml.dump(config, file, default_flow_style=False)
         st.write(config)
 
 
