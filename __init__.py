@@ -13,7 +13,6 @@ from  authenticate import Authenticate
 _RELEASE = True
 
 if _RELEASE:
-    # hashed_passwords = Hasher(['abc', 'def']).generate()
 
     # Loading config file
     with open('config.yaml') as file:
@@ -60,6 +59,7 @@ if _RELEASE:
         username_forgot_pw, email_forgot_password, random_password = authenticator.forgot_password('Forgot password')
         if username_forgot_pw:
             st.success('New password sent securely')
+            st.write(username_forgot_pw)
             # Random password to be transferred to user securely
         else:
             st.error('Username not found')
@@ -71,6 +71,7 @@ if _RELEASE:
         username_forgot_username, email_forgot_username = authenticator.forgot_username('Forgot username')
         if username_forgot_username:
             st.success('Username sent securely')
+            st.write(username_forgot_username)
             # Username to be transferred to user securely
         else:
             st.error('Email not found')
